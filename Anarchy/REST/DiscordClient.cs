@@ -3,7 +3,7 @@
     /// <summary>
     /// Discord client that only supports HTTP
     /// </summary>
-    public interface DiscordClient
+    public class DiscordClient
     {
         public DiscordClientUser User { get; internal set; }
         public LockedDiscordConfig Config { get; protected set; }
