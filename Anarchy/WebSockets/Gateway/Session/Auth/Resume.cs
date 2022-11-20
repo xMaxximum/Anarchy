@@ -9,7 +9,7 @@ namespace Discord.Gateway
 
         internal GatewayResume(DiscordSocketClient client)
         {
-            Token = client.Token;
+            Token = client.RestClient.Token;
             SessionId = client.SessionId;
             Sequence = client.Sequence;
         }

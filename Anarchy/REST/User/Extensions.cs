@@ -4,7 +4,7 @@ namespace Discord
 {
     public static class UserExtensions
     {
-        public static async Task<DiscordUser> GetUserAsync(this DiscordClient client, ulong userId)
+        public static async Task<DiscordUser> GetUserAsync(this IRestClient client, ulong userId)
         {
             return (await client.HttpClient.GetAsync($"/users/{userId}")).Deserialize<DiscordUser>().SetClient(client);
         }
@@ -13,12 +13,12 @@ namespace Discord
         /// Gets a user
         /// </summary>
         /// <param name="userId">ID of the user</param>
-        public static DiscordUser GetUser(this DiscordClient client, ulong userId)
+        public static DiscordUser GetUser(this IRestClient client, ulong userId)
         {
             return client.GetUserAsync(userId).GetAwaiter().GetResult();
         }
 
-        public static async Task<DiscordClientUser> GetClientUserAsync(this DiscordClient client)
+        public static async Task<DiscordClientUser> GetClientUserAsync(this IRestClient client)
         {
             try
             {
@@ -34,17 +34,17 @@ namespace Discord
         /// <summary>
         /// Gets the account's user
         /// </summary>
-        public static DiscordClientUser GetClientUser(this DiscordClient client)
+        public static DiscordClientUser GetClientUser(this IRestClient client)
         {
             return client.GetClientUserAsync().GetAwaiter().GetResult();
         }
 
-        public static Task ReportUserAsync(this DiscordClient client, DiscordReportReason reason, UserReportIdentification identification)
+        public static Task ReportUserAsync(this IRestClient client, DiscordReportReason reason, UserReportIdentification identification)
         {
             identification.Reason = reason;
             return client.HttpClient.PostAsync("/report", identification);
         }
 
-        public static void ReportUser(this DiscordClient client, DiscordReportReason reason, UserReportIdentification identification) => client.ReportUserAsync(reason, identification);
+        public static void ReportUser(this IRestClient client, DiscordReportReason reason, UserReportIdentification identification) => client.ReportUserAsync(reason, identification);
     }
 }

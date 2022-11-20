@@ -13,10 +13,10 @@ namespace Discord
 {
     public class DiscordHttpClient
     {
-        private readonly DiscordClient _discordClient;
+        private readonly IRestClient _discordClient;
         public string BaseUrl => DiscordHttpUtil.BuildBaseUrl(_discordClient.Config.ApiVersion, _discordClient.Config.SuperProperties.ReleaseChannel);
 
-        public DiscordHttpClient(DiscordClient discordClient)
+        public DiscordHttpClient(IRestClient discordClient)
         {
             _discordClient = discordClient;
         }

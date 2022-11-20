@@ -5,7 +5,7 @@ namespace Discord
 {
     public static class GuildDiscoveryExtensions
     {
-        public static async Task<GuildQueryResult> QueryGuildsAsync(this DiscordClient client, GuildQueryOptions options = null)
+        public static async Task<GuildQueryResult> QueryGuildsAsync(this IRestClient client, GuildQueryOptions options = null)
         {
             if (options == null)
                 options = new GuildQueryOptions();
@@ -24,7 +24,7 @@ namespace Discord
         /// <summary>
         /// Queries guilds in Server Discovery
         /// </summary>
-        public static GuildQueryResult QueryGuilds(this DiscordClient client, GuildQueryOptions options = null)
+        public static GuildQueryResult QueryGuilds(this IRestClient client, GuildQueryOptions options = null)
         {
             return client.QueryGuildsAsync(options).GetAwaiter().GetResult();
         }
@@ -38,7 +38,7 @@ namespace Discord
                 try
                 {
                     return (await client.HttpClient.PutAsync($"/guilds/{guildId}/members/@me?lurker=true&session_id={client.SessionId}"))
-                                        .Deserialize<DiscordGuild>().SetClient(client);
+                                        .Deserialize<DiscordGuild>().SetClient(client.RestClient);
                 }
                 catch (DiscordHttpException ex)
                 {
@@ -53,7 +53,7 @@ namespace Discord
             return client.LurkGuildAsync(guildId).GetAwaiter().GetResult();
         }
 
-        public static async Task<DiscordGuild> JoinGuildAsync(this DiscordClient client, ulong guildId)
+        public static async Task<DiscordGuild> JoinGuildAsync(this IRestClient client, ulong guildId)
         {
             return (await client.HttpClient.PutAsync($"/guilds/{guildId}/members/@me?lurker=false"))
                                 .Deserialize<DiscordGuild>().SetClient(client);
@@ -64,7 +64,7 @@ namespace Discord
         /// </summary>
         /// <param name="guildId">ID of the guild</param>
         /// <returns></returns>
-        public static DiscordGuild JoinGuild(this DiscordClient client, ulong guildId)
+        public static DiscordGuild JoinGuild(this IRestClient client, ulong guildId)
         {
             return client.JoinGuildAsync(guildId).GetAwaiter().GetResult();
         }

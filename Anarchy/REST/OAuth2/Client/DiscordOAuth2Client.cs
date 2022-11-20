@@ -24,7 +24,7 @@ namespace Discord
 
         public DiscordOAuth2Client(ulong clientId, string clientSecret, DiscordSocketClient botClient = null)
         {
-            if (botClient != null && botClient.User.Type != DiscordUserType.Bot)
+            if (botClient != null && botClient.RestClient.User.Type != DiscordUserType.Bot)
                 throw new ArgumentException("The client must be using a bot account", "botClient");
 
             _botClient = botClient;
@@ -90,7 +90,7 @@ namespace Discord
             if (!_auth.Scopes.Contains("identify") && !_auth.Scopes.Contains("email")) throw new InvalidOperationException("You must have the 'identify' or 'email' scope to make this request");
 
             var user = Request<DiscordUser>("GET", "/users/@me");
-            if (_botClient != null) user.SetClient(_botClient);
+            if (_botClient != null) user.SetClient(_botClient.RestClient);
 
             return user;
         }
@@ -100,7 +100,7 @@ namespace Discord
             if (!_auth.Scopes.Contains("connections")) throw new InvalidOperationException("You must have the 'connections' scope to make this request");
 
             var connections = Request<List<ConnectedAccount>>("GET", "/users/@me/connections");
-            if (_botClient != null) connections.SetClientsInList(_botClient);
+            if (_botClient != null) connections.SetClientsInList(_botClient.RestClient);
 
             return connections;
         }
@@ -110,7 +110,7 @@ namespace Discord
             if (!_auth.Scopes.Contains("guilds")) throw new InvalidOperationException("You must have the 'guilds' scope to make this request");
 
             var guilds = Request<List<PartialGuild>>("GET", "/users/@me/guilds");
-            if (_botClient != null) guilds.SetClientsInList(_botClient);
+            if (_botClient != null) guilds.SetClientsInList(_botClient.RestClient);
 
             return guilds;
         }
@@ -125,7 +125,7 @@ namespace Discord
             if (properties == null) properties = new OAuth2GuildJoinProperties();
             properties.AccessToken = _auth.AccessToken;
 
-            return _botClient.HttpClient.PutAsync($"/guilds/{guildId}/members/{GetUser().Id}", properties).GetAwaiter().GetResult().Deserialize<GuildMember>().SetClient(_botClient);
+            return _botClient.HttpClient.PutAsync($"/guilds/{guildId}/members/{GetUser().Id}", properties).GetAwaiter().GetResult().Deserialize<GuildMember>().SetClient(_botClient.RestClient);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Discord.Gateway
                 throw new DiscordHttpException(new DiscordHttpError(DiscordError.UnknownChannel, "Channel was not found in cache"));
             }
             else
-                return await ((DiscordClient) client).GetChannelAsync(channelId);
+                return await ((IRestClient) client).GetChannelAsync(channelId);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Discord.Gateway
             if (client.Config.Cache)
                 return client.GetCachedGuild(guildId).Channels;
             else
-                return await ((DiscordClient) client).GetGuildChannelsAsync(guildId);
+                return await ((IRestClient) client).GetGuildChannelsAsync(guildId);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Discord.Gateway
 
         public static async Task<IReadOnlyList<DiscordMessage>> GetChannelMessagesAsync(this DiscordSocketClient client, ulong channelId, MessageFilters filters = null)
         {
-            var messages = await ((DiscordClient) client).GetChannelMessagesAsync(channelId, filters);
+            var messages = await ((IRestClient) client).GetChannelMessagesAsync(channelId, filters);
 
             if (client.Config.Cache)
             {
@@ -128,7 +128,7 @@ namespace Discord.Gateway
                 }
             }
 
-            return ((DiscordClient) client).CreateDM(recipientId);
+            return ((IRestClient) client).CreateDM(recipientId);
         }
     }
 }

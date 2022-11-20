@@ -1,12 +1,21 @@
 ﻿namespace Discord
 {
+    public interface IRestClient
+    {
+        DiscordClientUser User { get; set; }
+        LockedDiscordConfig Config { get; set; }
+        DiscordHttpClient HttpClient { get; }
+
+        string Token { get; set; }
+    }
+
     /// <summary>
     /// Discord client that only supports HTTP
     /// </summary>
-    public class DiscordClient
+    public class RestClient<TClient> : IRestClient
     {
-        public DiscordClientUser User { get; internal set; }
-        public LockedDiscordConfig Config { get; protected set; }
+        public DiscordClientUser User { get; set; }
+        public LockedDiscordConfig Config { get; set; }
         public DiscordHttpClient HttpClient { get; private set; }
 
         private string _token;
@@ -38,21 +47,16 @@
             }
         }
 
-        protected DiscordClient()
+        internal RestClient()
         {
             HttpClient = new DiscordHttpClient(this);
         }
 
-        public DiscordClient(ApiConfig config = null) : this()
+        public RestClient(string token, ApiConfig config = null) : this()
         {
-            if (config == null)
-                config = new ApiConfig();
-
+            config ??= new ApiConfig();
             Config = new LockedDiscordConfig(config);
-        }
 
-        public DiscordClient(string token, ApiConfig config = null) : this(config)
-        {
             Token = token;
         }
 
@@ -60,5 +64,17 @@
         {
             return User.ToString();
         }
+    }
+
+    public interface IBotClient
+    {
+    }
+
+    public interface IUserClient
+    {
+    }
+
+    public interface IWebhookClient
+    {
     }
 }

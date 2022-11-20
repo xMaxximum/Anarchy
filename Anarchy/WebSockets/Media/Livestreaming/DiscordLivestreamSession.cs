@@ -23,8 +23,8 @@ namespace Discord.Media
 
         public MediaConnectionState State => _connection == null ? MediaConnectionState.NotConnected : _connection.State;
 
-        public MinimalGuild Guild => new MinimalGuild(_streamKey.GuildId).SetClient(Client);
-        public MinimalChannel Channel => new MinimalChannel(_streamKey.ChannelId).SetClient(Client);
+        public MinimalGuild Guild => new MinimalGuild(_streamKey.GuildId).SetClient(Client.RestClient);
+        public MinimalChannel Channel => new MinimalChannel(_streamKey.ChannelId).SetClient(Client.RestClient);
         public DiscordSocketClient Client { get; }
 
         public ulong StreamerId => _streamKey.UserId;

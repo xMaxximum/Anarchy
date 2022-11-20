@@ -6,7 +6,7 @@ namespace Discord
 {
     public static class AuditLogExtensions
     {
-        public static async Task<IReadOnlyList<AuditLogEntry>> GetAuditLogAsync(this DiscordClient client, ulong guildId, AuditLogFilters filters = null)
+        public static async Task<IReadOnlyList<AuditLogEntry>> GetAuditLogAsync(this IRestClient client, ulong guildId, AuditLogFilters filters = null)
         {
             if (filters == null)
                 filters = new AuditLogFilters();
@@ -20,7 +20,7 @@ namespace Discord
         /// </summary>
         /// <param name="guildId">ID of the guild</param>
         /// <returns>A <see cref="IReadOnlyList{AuditLogEntry}"/></returns>
-        public static IReadOnlyList<AuditLogEntry> GetAuditLog(this DiscordClient client, ulong guildId, AuditLogFilters filters = null)
+        public static IReadOnlyList<AuditLogEntry> GetAuditLog(this IRestClient client, ulong guildId, AuditLogFilters filters = null)
         {
             return client.GetAuditLogAsync(guildId, filters).GetAwaiter().GetResult();
         }

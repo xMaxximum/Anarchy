@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Anarchy;
@@ -13,9 +14,9 @@ using Newtonsoft.Json.Linq;
 namespace Discord.Gateway
 {
     /// <summary>
-    /// <see cref="DiscordClient"/> with Gateway support
+    /// <see cref="IRestClient"/> with Gateway support
     /// </summary>
-    public class DiscordSocketClient : DiscordClient, IDisposable
+    public class DiscordSocketClient : IDisposable
     {
         #region events
         public delegate void ClientEventHandler<T>(DiscordSocketClient client, T args);
@@ -100,6 +101,11 @@ namespace Discord.Gateway
         public event ClientEventHandler<RequiredActionEventArgs> OnRequiredUserAction;
         #endregion
 
+
+        internal IRestClient RestClient { get; private set; }
+        public DiscordHttpClient HttpClient { get => RestClient.HttpClient; }
+        public DiscordClientUser User { get => RestClient.User; }
+
         // caching
         internal ConcurrentDictionary<ulong, SocketGuild> GuildCache { get; private set; }
         internal ConcurrentList<PrivateChannel> PrivateChannels { get; private set; }
@@ -109,9 +115,10 @@ namespace Discord.Gateway
         internal List<DiscordChannelSettings> PrivateChannelSettings { get; private set; }
         internal ConcurrentDictionary<ulong, GuildMember> ClientMembers { get; private set; }
 
+
         public CommandHandler CommandHandler { get; private set; }
         private SlashCommandHandler SlashCommandHandler { get; set; }
-        public new LockedSocketConfig Config { get; private set; }
+        public LockedSocketConfig Config { get; private set; }
 
         internal VoiceClientDictionary VoiceClients { get; private set; }
 
@@ -138,7 +145,6 @@ namespace Discord.Gateway
                 config = new DiscordSocketConfig();
 
             Config = new LockedSocketConfig(config);
-            base.Config = Config;
 
             if (Config.Cache)
             {
@@ -169,7 +175,7 @@ namespace Discord.Gateway
                 if (LoggedIn && (lostConnection || err == GatewayCloseCode.RateLimited || err == GatewayCloseCode.SessionTimedOut || err == GatewayCloseCode.UnknownError))
                 {
                     LoggedIn = false;
-                    Login(Token);
+                    Login(RestClient.Token);
                 }
                 else
                 {
@@ -203,10 +209,10 @@ namespace Discord.Gateway
 
         public void Login(string token)
         {
-            if (Token != token)
-                Token = token;
+            if (RestClient.Token != token)
+                RestClient.Token = token;
 
-            if (User.Type == DiscordUserType.Bot && Config.ApiVersion >= 8 && !Config.Intents.HasValue)
+            if (RestClient.User.Type == DiscordUserType.Bot && Config.ApiVersion >= 8 && !Config.Intents.HasValue)
                 throw new ArgumentNullException(nameof(token), "Gateway intents must be provided as of API v8");
 
             State = GatewayConnectionState.Connecting;
@@ -233,7 +239,7 @@ namespace Discord.Gateway
             {
                 foreach (var member in guild.Members)
                 {
-                    if (member.User.Id == User.Id)
+                    if (member.User.Id == RestClient.User.Id)
                     {
                         ClientMembers[guild.Id] = member;
                         break;
@@ -282,15 +288,15 @@ namespace Discord.Gateway
                     switch (message.EventName)
                     {
                         case "READY":
-                            LoginEventArgs login = message.Data.ToObject<LoginEventArgs>().SetClient(this);
+                            LoginEventArgs login = message.Data.ToObject<LoginEventArgs>().SetClient(this.RestClient);
 
                             if (login.Application != null) _appId = login.Application.Value<ulong>("id");
 
-                            this.User = login.User;
-                            this.UserSettings = User.Type == DiscordUserType.User ? login.Settings : null;
+                            this.RestClient.User = login.User;
+                            this.UserSettings = RestClient.User.Type == DiscordUserType.User ? login.Settings : null;
                             this.SessionId = login.SessionId;
 
-                            if (Config.Cache && this.User.Type == DiscordUserType.User)
+                            if (Config.Cache && this.RestClient.User.Type == DiscordUserType.User)
                             {
                                 PrivateChannels.AddRange(login.PrivateChannels);
 
@@ -336,10 +342,10 @@ namespace Discord.Gateway
                             }
                             break;
                         case "USER_UPDATE":
-                            DiscordUser user = message.Data.ToObject<DiscordUser>().SetClient(this);
+                            DiscordUser user = message.Data.ToObject<DiscordUser>().SetClient(this.RestClient);
 
-                            if (user.Id == User.Id)
-                                User.Update(user);
+                            if (user.Id == RestClient.User.Id)
+                                RestClient.User.Update(user);
 
                             if (Config.Cache)
                             {
@@ -364,12 +370,12 @@ namespace Discord.Gateway
                                 Task.Run(() => OnUserUpdated.Invoke(this, new UserEventArgs(user)));
                             break;
                         case "GUILD_MEMBER_LIST_UPDATE":
-                            OnMemberListUpdate?.Invoke(this, message.Data.ToObject<DiscordMemberListUpdate>().SetClient(this));
+                            OnMemberListUpdate?.Invoke(this, message.Data.ToObject<DiscordMemberListUpdate>().SetClient(this.RestClient));
                             break;
                         case "GUILD_CREATE":
                             if (Config.Cache || OnJoinedGuild != null)
                             {
-                                var guild = message.Data.ToObject<SocketGuild>().SetClient(this);
+                                var guild = message.Data.ToObject<SocketGuild>().SetClient(this.RestClient);
 
                                 VoiceClients[guild.Id] = new DiscordVoiceClient(this, guild.Id);
 
@@ -383,7 +389,7 @@ namespace Discord.Gateway
                         case "GUILD_UPDATE":
                             if (Config.Cache || OnGuildUpdated != null)
                             {
-                                DiscordGuild guild = message.Data.ToObject<DiscordGuild>().SetClient(this);
+                                DiscordGuild guild = message.Data.ToObject<DiscordGuild>().SetClient(this.RestClient);
 
                                 if (Config.Cache)
                                     GuildCache[guild.Id].Update(guild);
@@ -418,7 +424,7 @@ namespace Discord.Gateway
                         case "GUILD_MEMBER_ADD":
                             if (Config.Cache || OnUserJoinedGuild != null)
                             {
-                                var member = message.Data.ToObject<GuildMember>().SetClient(this);
+                                var member = message.Data.ToObject<GuildMember>().SetClient(this.RestClient);
 
                                 if (Config.Cache)
                                     GuildCache[member.GuildId].MemberCount++;
@@ -429,7 +435,7 @@ namespace Discord.Gateway
                         case "GUILD_MEMBER_REMOVE":
                             if (Config.Cache || OnUserLeftGuild != null)
                             {
-                                var member = message.Data.ToObject<PartialGuildMember>().SetClient(this);
+                                var member = message.Data.ToObject<PartialGuildMember>().SetClient(this.RestClient);
 
                                 if (Config.Cache && GuildCache.ContainsKey(member.Guild.Id))
                                     GuildCache[member.Guild.Id].MemberCount--;
@@ -440,9 +446,9 @@ namespace Discord.Gateway
                         case "GUILD_MEMBER_UPDATE":
                             if (Config.Cache || OnGuildMemberUpdated != null)
                             {
-                                GuildMember member = message.Data.ToObject<GuildMember>().SetClient(this);
+                                GuildMember member = message.Data.ToObject<GuildMember>().SetClient(this.RestClient);
 
-                                if (Config.Cache && member.User.Id == User.Id)
+                                if (Config.Cache && member.User.Id == RestClient.User.Id)
                                 {
                                     SocketGuild guild = this.GetCachedGuild(member.GuildId);
 
@@ -458,7 +464,7 @@ namespace Discord.Gateway
                             }
                             break;
                         case "GUILD_MEMBERS_CHUNK":
-                            Task.Run(() => OnGuildMembersReceived?.Invoke(this, new GuildMembersEventArgs(message.Data.ToObject<GuildMemberList>().SetClient(this))));
+                            Task.Run(() => OnGuildMembersReceived?.Invoke(this, new GuildMembersEventArgs(message.Data.ToObject<GuildMemberList>().SetClient(this.RestClient))));
                             break;
                         case "GIFT_CODE_CREATE":
                             if (OnGiftCodeCreated != null)
@@ -467,7 +473,7 @@ namespace Discord.Gateway
                         case "GIFT_CODE_UPDATE":
                             if (OnGiftUpdated != null)
                             {
-                                var gift = message.Data.ToObject<GiftCodeUpdatedEventArgs>().SetClient(this);
+                                var gift = message.Data.ToObject<GiftCodeUpdatedEventArgs>().SetClient(this.RestClient);
                                 gift.Json = (JObject) message.Data;
 
                                 Task.Run(() => OnGiftUpdated.Invoke(this, gift));
@@ -476,7 +482,7 @@ namespace Discord.Gateway
                         case "PRESENCE_UPDATE":
                             if (Config.Cache || OnUserPresenceUpdated != null)
                             {
-                                var presence = message.Data.ToObject<DiscordPresence>().SetClient(this);
+                                var presence = message.Data.ToObject<DiscordPresence>().SetClient(this.RestClient);
 
                                 if (Config.Cache)
                                 {
@@ -496,7 +502,7 @@ namespace Discord.Gateway
                         case "VOICE_STATE_UPDATE":
                             try
                             {
-                                DiscordVoiceState newState = message.Data.ToObject<DiscordVoiceState>().SetClient(this);
+                                DiscordVoiceState newState = message.Data.ToObject<DiscordVoiceState>().SetClient(this.RestClient);
 
                                 if (Config.Cache)
                                 {
@@ -525,7 +531,7 @@ namespace Discord.Gateway
                                     }
                                 }
 
-                                if (newState.UserId == User.Id)
+                                if (newState.UserId == RestClient.User.Id)
                                 {
                                     if (newState.Guild == null) VoiceClients.Private.SetSessionId(newState.SessionId);
                                     else VoiceClients[newState.Guild.Id].SetSessionId(newState.SessionId);
@@ -537,12 +543,12 @@ namespace Discord.Gateway
                             catch (JsonException) { } // very lazy fix for joined_at sometimes being null
                             break;
                         case "VOICE_SERVER_UPDATE":
-                            OnMediaServer?.Invoke(this, message.Data.ToObject<DiscordMediaServer>().SetClient(this));
+                            OnMediaServer?.Invoke(this, message.Data.ToObject<DiscordMediaServer>().SetClient(this.RestClient));
                             break;
                         case "GUILD_ROLE_CREATE":
                             if (Config.Cache || OnRoleCreated != null)
                             {
-                                DiscordRole role = message.Data.ToObject<RoleUpdate>().Role.SetClient(this);
+                                DiscordRole role = message.Data.ToObject<RoleUpdate>().Role.SetClient(this.RestClient);
 
                                 if (Config.Cache)
                                     GuildCache[role.GuildId]._roles.Add(role);
@@ -554,7 +560,7 @@ namespace Discord.Gateway
                         case "GUILD_ROLE_UPDATE":
                             if (Config.Cache || OnRoleUpdated != null)
                             {
-                                DiscordRole role = message.Data.ToObject<RoleUpdate>().Role.SetClient(this);
+                                DiscordRole role = message.Data.ToObject<RoleUpdate>().Role.SetClient(this.RestClient);
 
                                 if (Config.Cache)
                                     GuildCache[role.GuildId]._roles.ReplaceFirst(r => r.Id == role.Id, role);
@@ -566,7 +572,7 @@ namespace Discord.Gateway
                         case "GUILD_ROLE_DELETE":
                             if (Config.Cache || OnRoleDeleted != null)
                             {
-                                DeletedRole role = message.Data.ToObject<DeletedRole>().SetClient(this);
+                                DeletedRole role = message.Data.ToObject<DeletedRole>().SetClient(this.RestClient);
 
                                 if (Config.Cache)
                                     GuildCache[role.Guild]._roles.RemoveFirst(r => r.Id == role.Id);
@@ -578,7 +584,7 @@ namespace Discord.Gateway
                         case "GUILD_EMOJIS_UPDATE":
                             if (Config.Cache || OnEmojisUpdated != null)
                             {
-                                var emojis = message.Data.ToObject<EmojiContainer>().SetClient(this);
+                                var emojis = message.Data.ToObject<EmojiContainer>().SetClient(this.RestClient);
 
                                 if (Config.Cache)
                                     GuildCache[emojis.GuildId]._emojis = emojis.Emojis.ToList();
@@ -647,12 +653,12 @@ namespace Discord.Gateway
                             break;
                         case "TYPING_START":
                             if (OnUserTyping != null)
-                                Task.Run(() => OnUserTyping.Invoke(this, new UserTypingEventArgs(message.Data.ToObject<UserTyping>().SetClient(this))));
+                                Task.Run(() => OnUserTyping.Invoke(this, new UserTypingEventArgs(message.Data.ToObject<UserTyping>().SetClient(this.RestClient))));
                             break;
                         case "MESSAGE_CREATE":
                             if (Config.Cache || OnMessageReceived != null)
                             {
-                                var newMessage = message.Data.ToObject<DiscordMessage>().SetClient(this);
+                                var newMessage = message.Data.ToObject<DiscordMessage>().SetClient(this.RestClient);
 
                                 if (Config.Cache)
                                 {
@@ -669,39 +675,39 @@ namespace Discord.Gateway
                             break;
                         case "MESSAGE_UPDATE":
                             if (OnMessageEdited != null)
-                                Task.Run(() => OnMessageEdited.Invoke(this, new MessageEventArgs(message.Data.ToObject<DiscordMessage>().SetClient(this))));
+                                Task.Run(() => OnMessageEdited.Invoke(this, new MessageEventArgs(message.Data.ToObject<DiscordMessage>().SetClient(this.RestClient))));
                             break;
                         case "MESSAGE_DELETE":
                             if (OnMessageDeleted != null)
-                                Task.Run(() => OnMessageDeleted.Invoke(this, new MessageDeletedEventArgs(message.Data.ToObject<DeletedMessage>().SetClient(this))));
+                                Task.Run(() => OnMessageDeleted.Invoke(this, new MessageDeletedEventArgs(message.Data.ToObject<DeletedMessage>().SetClient(this.RestClient))));
                             break;
                         case "MESSAGE_REACTION_ADD":
                             if (OnMessageReactionAdded != null)
-                                Task.Run(() => OnMessageReactionAdded.Invoke(this, new ReactionEventArgs(message.Data.ToObject<MessageReactionUpdate>().SetClient(this))));
+                                Task.Run(() => OnMessageReactionAdded.Invoke(this, new ReactionEventArgs(message.Data.ToObject<MessageReactionUpdate>().SetClient(this.RestClient))));
                             break;
                         case "MESSAGE_REACTION_REMOVE":
                             if (OnMessageReactionRemoved != null)
-                                Task.Run(() => OnMessageReactionRemoved.Invoke(this, new ReactionEventArgs(message.Data.ToObject<MessageReactionUpdate>().SetClient(this))));
+                                Task.Run(() => OnMessageReactionRemoved.Invoke(this, new ReactionEventArgs(message.Data.ToObject<MessageReactionUpdate>().SetClient(this.RestClient))));
                             break;
                         case "GUILD_BAN_ADD":
                             if (OnUserBanned != null)
-                                Task.Run(() => OnUserBanned.Invoke(this, message.Data.ToObject<BanUpdateEventArgs>().SetClient(this)));
+                                Task.Run(() => OnUserBanned.Invoke(this, message.Data.ToObject<BanUpdateEventArgs>().SetClient(this.RestClient)));
                             break;
                         case "GUILD_BAN_REMOVE":
                             if (OnUserUnbanned != null)
-                                Task.Run(() => OnUserUnbanned.Invoke(this, message.Data.ToObject<BanUpdateEventArgs>().SetClient(this)));
+                                Task.Run(() => OnUserUnbanned.Invoke(this, message.Data.ToObject<BanUpdateEventArgs>().SetClient(this.RestClient)));
                             break;
                         case "INVITE_CREATE":
                             if (OnInviteCreated != null)
-                                Task.Run(() => OnInviteCreated.Invoke(this, message.Data.ToObject<InviteCreatedEventArgs>().SetClient(this)));
+                                Task.Run(() => OnInviteCreated.Invoke(this, message.Data.ToObject<InviteCreatedEventArgs>().SetClient(this.RestClient)));
                             break;
                         case "INVITE_DELETE":
                             if (OnInviteDeleted != null)
-                                Task.Run(() => OnInviteDeleted.Invoke(this, message.Data.ToObject<InviteDeletedEventArgs>().SetClient(this)));
+                                Task.Run(() => OnInviteDeleted.Invoke(this, message.Data.ToObject<InviteDeletedEventArgs>().SetClient(this.RestClient)));
                             break;
                         case "RELATIONSHIP_ADD":
                             if (OnRelationshipAdded != null)
-                                Task.Run(() => OnRelationshipAdded.Invoke(this, new RelationshipEventArgs(message.Data.ToObject<DiscordRelationship>().SetClient(this))));
+                                Task.Run(() => OnRelationshipAdded.Invoke(this, new RelationshipEventArgs(message.Data.ToObject<DiscordRelationship>().SetClient(this.RestClient))));
                             break;
                         case "RELATIONSHIP_REMOVE":
                             if (OnRelationshipRemoved != null)
@@ -710,7 +716,7 @@ namespace Discord.Gateway
                         case "CHANNEL_RECIPIENT_ADD":
                             if (Config.Cache || OnChannelRecipientAdded != null)
                             {
-                                var recipUpdate = message.Data.ToObject<ChannelRecipientEventArgs>().SetClient(this);
+                                var recipUpdate = message.Data.ToObject<ChannelRecipientEventArgs>().SetClient(this.RestClient);
 
                                 if (Config.Cache)
                                     ((PrivateChannel) this.GetChannel(recipUpdate.Channel.Id))._recipients.Add(recipUpdate.User);
@@ -722,7 +728,7 @@ namespace Discord.Gateway
                         case "CHANNEL_RECIPIENT_REMOVE":
                             if (Config.Cache || OnChannelRecipientAdded != null)
                             {
-                                var recipUpdate = message.Data.ToObject<ChannelRecipientEventArgs>().SetClient(this);
+                                var recipUpdate = message.Data.ToObject<ChannelRecipientEventArgs>().SetClient(this.RestClient);
 
                                 if (Config.Cache)
                                     ((PrivateChannel) this.GetChannel(recipUpdate.Channel.Id))._recipients.RemoveFirst(u => u.Id == recipUpdate.User.Id);
@@ -740,8 +746,8 @@ namespace Discord.Gateway
                         case "CALL_CREATE":
                             if (Config.Cache || OnRinging != null)
                             {
-                                var call = message.Data.ToObject<DiscordCall>().SetClient(this);
-                                var voiceStates = message.Data.Value<JToken>("voice_states").ToObject<IReadOnlyList<DiscordVoiceState>>().SetClientsInList(this);
+                                var call = message.Data.ToObject<DiscordCall>().SetClient(this.RestClient);
+                                var voiceStates = message.Data.Value<JToken>("voice_states").ToObject<IReadOnlyList<DiscordVoiceState>>().SetClientsInList(this.RestClient);
 
                                 if (Config.Cache)
                                 {
@@ -755,7 +761,7 @@ namespace Discord.Gateway
                             break;
                         case "CALL_UPDATE":
                             if (OnCallUpdated != null)
-                                Task.Run(() => OnCallUpdated.Invoke(this, new CallUpdateEventArgs(message.Data.ToObject<DiscordCall>().SetClient(this))));
+                                Task.Run(() => OnCallUpdated.Invoke(this, new CallUpdateEventArgs(message.Data.ToObject<DiscordCall>().SetClient(this.RestClient))));
                             break;
                         case "CALL_DELETE":
                             if (Config.Cache || OnCallEnded != null)
@@ -774,7 +780,7 @@ namespace Discord.Gateway
                                 }
 
                                 if (OnCallEnded != null)
-                                    Task.Run(() => OnCallEnded.Invoke(this, new MinimalTextChannel(channelId).SetClient(this)));
+                                    Task.Run(() => OnCallEnded.Invoke(this, new MinimalTextChannel(channelId).SetClient(this.RestClient)));
                             }
                             break;
                         case "ENTITLEMENT_CREATE":
@@ -787,14 +793,14 @@ namespace Discord.Gateway
                             break;
                         case "USER_PREMIUM_GUILD_SUBSCRIPTION_SLOT_CREATE":
                             if (OnBoostSlotCreated != null)
-                                Task.Run(() => OnBoostSlotCreated.Invoke(this, new NitroBoostEventArgs(message.Data.ToObject<DiscordBoostSlot>().SetClient(this))));
+                                Task.Run(() => OnBoostSlotCreated.Invoke(this, new NitroBoostEventArgs(message.Data.ToObject<DiscordBoostSlot>().SetClient(this.RestClient))));
                             break;
                         case "USER_PREMIUM_GUILD_SUBSCRIPTION_SLOT_UPDATE":
                             if (OnBoostSlotUpdated != null)
-                                Task.Run(() => OnBoostSlotUpdated.Invoke(this, new NitroBoostEventArgs(message.Data.ToObject<DiscordBoostSlot>().SetClient(this))));
+                                Task.Run(() => OnBoostSlotUpdated.Invoke(this, new NitroBoostEventArgs(message.Data.ToObject<DiscordBoostSlot>().SetClient(this.RestClient))));
                             break;
                         case "STREAM_SERVER_UPDATE":
-                            OnMediaServer?.Invoke(this, message.Data.ToObject<DiscordMediaServer>().SetClient(this));
+                            OnMediaServer?.Invoke(this, message.Data.ToObject<DiscordMediaServer>().SetClient(this.RestClient));
                             break;
                         case "STREAM_CREATE":
                             var create = message.Data.ToObject<GoLiveCreate>();
@@ -811,7 +817,7 @@ namespace Discord.Gateway
                         case "CHANNEL_UNREAD_UPDATE":
                             if (Config.Cache || OnGuildUnreadMessagesUpdated != null)
                             {
-                                var unread = message.Data.ToObject<GuildUnreadMessages>().SetClient(this);
+                                var unread = message.Data.ToObject<GuildUnreadMessages>().SetClient(this.RestClient);
 
                                 if (Config.Cache)
                                 {
@@ -825,7 +831,7 @@ namespace Discord.Gateway
                             break;
                         case "INTERACTION_CREATE":
                             if (OnInteraction != null)
-                                Task.Run(() => OnInteraction.Invoke(this, new DiscordInteractionEventArgs(message.Data.ToObject<DiscordInteraction>().SetClient(this))));
+                                Task.Run(() => OnInteraction.Invoke(this, new DiscordInteractionEventArgs(message.Data.ToObject<DiscordInteraction>().SetClient(this.RestClient))));
                             break;
                         case "USER_REQUIRED_ACTION_UPDATE":
                             if (OnRequiredUserAction != null)

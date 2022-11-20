@@ -117,7 +117,7 @@ namespace Discord.Commands
                                     throw new InvalidOperationException("Caching must be enabled to parse DiscordChannels");
                             }
                             else
-                                return new MinimalTextChannel(anyId).SetClient(_client);
+                                return new MinimalTextChannel(anyId).SetClient(_client.RestClient);
                         }
                         else
                             throw new ArgumentException("Invalid reference type");
@@ -151,7 +151,7 @@ namespace Discord.Commands
                                     throw new InvalidOperationException("Caching must be enabled to parase DiscordEmojis");
                             }
                             else
-                                return new PartialEmoji(anyId, name, animated).SetClient(_client);
+                                return new PartialEmoji(anyId, name, animated).SetClient(_client.RestClient);
                         }
                         else
                             throw new ArgumentException("Invalid reference type");

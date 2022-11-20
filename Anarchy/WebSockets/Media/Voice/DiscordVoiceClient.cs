@@ -18,10 +18,10 @@ namespace Discord.Media
         public DiscordMediaServer Server { get; private set; }
 
         private readonly ulong? _guildId;
-        public MinimalGuild Guild => _guildId.HasValue ? new MinimalGuild(_guildId.Value).SetClient(_client) : null;
+        public MinimalGuild Guild => _guildId.HasValue ? new MinimalGuild(_guildId.Value).SetClient(_client.RestClient) : null;
 
         private ulong? _channelId;
-        public MinimalChannel Channel => _channelId.HasValue ? new MinimalChannel(_channelId.Value).SetClient(_client) : null;
+        public MinimalChannel Channel => _channelId.HasValue ? new MinimalChannel(_channelId.Value).SetClient(_client.RestClient) : null;
 
         public DiscordVoiceInput Microphone { get; private set; }
         public DiscordLivestreamClient Livestream { get; private set; }

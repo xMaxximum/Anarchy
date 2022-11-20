@@ -5,7 +5,7 @@ namespace Discord
 {
     public static class InviteExtensions
     {
-        public static async Task<DiscordInvite> CreateInviteAsync(this DiscordClient client, ulong channelId, InviteProperties properties = null)
+        public static async Task<DiscordInvite> CreateInviteAsync(this IRestClient client, ulong channelId, InviteProperties properties = null)
         {
             if (properties == null)
                 properties = new InviteProperties();
@@ -20,12 +20,12 @@ namespace Discord
         /// <param name="channelId">ID of the channel</param>
         /// <param name="properties">Options for creating the invite</param>
         /// <returns>The created invite</returns>
-        public static DiscordInvite CreateInvite(this DiscordClient client, ulong channelId, InviteProperties properties = null)
+        public static DiscordInvite CreateInvite(this IRestClient client, ulong channelId, InviteProperties properties = null)
         {
             return client.CreateInviteAsync(channelId, properties).GetAwaiter().GetResult();
         }
 
-        public static async Task<DiscordInvite> DeleteInviteAsync(this DiscordClient client, string invCode)
+        public static async Task<DiscordInvite> DeleteInviteAsync(this IRestClient client, string invCode)
         {
             return (await client.HttpClient.DeleteAsync($"/invites/{invCode}"))
                                     .ParseDeterministic<DiscordInvite>().SetClient(client);
@@ -36,12 +36,12 @@ namespace Discord
         /// </summary>
         /// <param name="invCode">The invite's code</param>
         /// <returns>The deleted invite</returns>
-        public static DiscordInvite DeleteInvite(this DiscordClient client, string invCode)
+        public static DiscordInvite DeleteInvite(this IRestClient client, string invCode)
         {
             return client.DeleteInviteAsync(invCode).GetAwaiter().GetResult();
         }
 
-        public static async Task<DiscordInvite> GetInviteAsync(this DiscordClient client, string invCode)
+        public static async Task<DiscordInvite> GetInviteAsync(this IRestClient client, string invCode)
         {
             return (await client.HttpClient.GetAsync($"/invites/{invCode}?with_counts=true"))
                                       .ParseDeterministic<DiscordInvite>().SetClient(client);
@@ -50,12 +50,12 @@ namespace Discord
         /// <summary>
         /// Gets an invite
         /// </summary>
-        public static DiscordInvite GetInvite(this DiscordClient client, string invCode)
+        public static DiscordInvite GetInvite(this IRestClient client, string invCode)
         {
             return client.GetInviteAsync(invCode).GetAwaiter().GetResult();
         }
 
-        public static async Task<IReadOnlyList<GuildInvite>> GetGuildInvitesAsync(this DiscordClient client, ulong guildId)
+        public static async Task<IReadOnlyList<GuildInvite>> GetGuildInvitesAsync(this IRestClient client, ulong guildId)
         {
             return (await client.HttpClient.GetAsync($"/guilds/{guildId}/invites")).Deserialize<List<GuildInvite>>().SetClientsInList(client);
         }
@@ -64,7 +64,7 @@ namespace Discord
         /// Gets a guild's invites
         /// </summary>
         /// <param name="guildId">ID of the guild</param>
-        public static IReadOnlyList<GuildInvite> GetGuildInvites(this DiscordClient client, ulong guildId)
+        public static IReadOnlyList<GuildInvite> GetGuildInvites(this IRestClient client, ulong guildId)
         {
             return client.GetGuildInvitesAsync(guildId).GetAwaiter().GetResult();
         }

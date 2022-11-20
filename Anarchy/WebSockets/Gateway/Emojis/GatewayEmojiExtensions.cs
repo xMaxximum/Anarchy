@@ -12,7 +12,7 @@ namespace Discord.Gateway
             if (client.Config.Cache)
                 return client.GetCachedGuild(guildId).Emojis;
             else
-                return await ((DiscordClient) client).GetGuildEmojisAsync(guildId);
+                return await ((IRestClient) client).GetGuildEmojisAsync(guildId);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Discord.Gateway
                 }
             }
             else
-                return await ((DiscordClient) client).GetGuildEmojiAsync(guildId, emojiId);
+                return await ((IRestClient) client).GetGuildEmojiAsync(guildId, emojiId);
         }
 
         public static DiscordEmoji GetGuildEmoji(this DiscordSocketClient client, ulong guildId, ulong emojiId)

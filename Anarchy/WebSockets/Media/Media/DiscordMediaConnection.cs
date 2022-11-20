@@ -117,7 +117,7 @@ namespace Discord.Media
                         SendMessage(DiscordMediaOpcode.Identify, new DiscordMediaIdentify()
                         {
                             ServerId = _serverId,
-                            UserId = _parentClient.User.Id,
+                            UserId = _parentClient.RestClient.User.Id,
                             SessionId = _parentClient.SessionId,
                             Token = _server.Token,
                             Video = true

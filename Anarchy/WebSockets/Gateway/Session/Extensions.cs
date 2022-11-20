@@ -9,7 +9,7 @@
         {
             client.Send(GatewayOpcode.Identify, new GatewayIdentification()
             {
-                Token = client.Token,
+                Token = client.RestClient.Token,
                 Properties = client.Config.SuperProperties,
                 Intents = client.User.Type == DiscordUserType.Bot ? client.Config.Intents : null,
                 Shard = client.Config.Shard

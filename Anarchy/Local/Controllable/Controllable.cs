@@ -7,9 +7,9 @@ namespace Discord
     {
         protected event EventHandler OnClientUpdated;
 
-        private DiscordClient _client;
+        private IRestClient _client;
         [JsonIgnore]
-        public DiscordClient Client
+        public IRestClient Client
         {
             get { return _client; }
             set
