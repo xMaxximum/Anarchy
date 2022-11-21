@@ -6,7 +6,7 @@ namespace Discord
 {
     public static class SubscriptionExtensions
     {
-        public static async Task<DiscordActiveSubscription> GetActiveSubscriptionAsync(this IRestClient client)
+        public static async Task<DiscordActiveSubscription> GetActiveSubscriptionAsync(this RestClient<IUserClient> client)
         {
             var activeSubscriptions = (await client.HttpClient.GetAsync("/users/@me/billing/subscriptions"))
                                                         .Deserialize<IReadOnlyList<DiscordActiveSubscription>>();
@@ -14,12 +14,12 @@ namespace Discord
             return activeSubscriptions.Count > 0 ? activeSubscriptions[0] : null;
         }
 
-        public static DiscordActiveSubscription GetActiveSubscription(this IRestClient client)
+        public static DiscordActiveSubscription GetActiveSubscription(this RestClient<IUserClient> client)
         {
             return client.GetActiveSubscriptionAsync().GetAwaiter().GetResult();
         }
 
-        public static async Task<DiscordActiveSubscription> PurchaseSubscriptionAsync(this IRestClient client, ulong paymentMethodId, ulong skuId, uint additionalBoosts = 0)
+        public static async Task<DiscordActiveSubscription> PurchaseSubscriptionAsync(this RestClient<IUserClient> client, ulong paymentMethodId, ulong skuId, uint additionalBoosts = 0)
         {
             List<AdditionalSubscriptionPlan> plans = new List<AdditionalSubscriptionPlan>();
 
@@ -30,7 +30,7 @@ namespace Discord
                                 .Deserialize<DiscordActiveSubscription>();
         }
 
-        public static DiscordActiveSubscription PurchaseSubscription(this IRestClient client, ulong paymentMethodId, ulong skuId, uint additionalBoosts = 0)
+        public static DiscordActiveSubscription PurchaseSubscription(this RestClient<IUserClient> client, ulong paymentMethodId, ulong skuId, uint additionalBoosts = 0)
         {
             return client.PurchaseSubscriptionAsync(paymentMethodId, skuId, additionalBoosts).GetAwaiter().GetResult();
         }

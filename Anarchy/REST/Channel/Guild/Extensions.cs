@@ -6,7 +6,6 @@ namespace Discord
 {
     public static class GuildChannelExtensions
     {
-#pragma warning disable IDE1006
         public static async Task<IReadOnlyList<GuildChannel>> GetGuildChannelsAsync(this IRestClient client, ulong guildId)
         {
             var channels = (await client.HttpClient.GetAsync($"/guilds/{guildId}/channels")).MultipleDeterministic<GuildChannel>().SetClientsInList(client);
@@ -79,7 +78,6 @@ namespace Discord
         {
             client.RemovePermissionOverwriteAsync(channelId, affectedId).GetAwaiter().GetResult();
         }
-#pragma warning restore IDE1006
 
         public static async Task<ulong> FollowChannelAsync(this IRestClient client, ulong channelToFollowId, ulong crosspostChannelId)
         {

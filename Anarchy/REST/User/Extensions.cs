@@ -39,12 +39,12 @@ namespace Discord
             return client.GetClientUserAsync().GetAwaiter().GetResult();
         }
 
-        public static Task ReportUserAsync(this IRestClient client, DiscordReportReason reason, UserReportIdentification identification)
+        public static Task ReportUserAsync(this RestClient<IUserClient> client, DiscordReportReason reason, UserReportIdentification identification)
         {
             identification.Reason = reason;
             return client.HttpClient.PostAsync("/report", identification);
         }
 
-        public static void ReportUser(this IRestClient client, DiscordReportReason reason, UserReportIdentification identification) => client.ReportUserAsync(reason, identification);
+        public static void ReportUser(this RestClient<IUserClient> client, DiscordReportReason reason, UserReportIdentification identification) => client.ReportUserAsync(reason, identification);
     }
 }

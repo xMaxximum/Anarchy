@@ -183,7 +183,7 @@ namespace Discord
             return client.GetGuildAsync(guildId).GetAwaiter().GetResult();
         }
 
-        public static async Task<GuildInvite> JoinGuildAsync(this IRestClient client, string invCode, string captchaKey = null)
+        public static async Task<GuildInvite> JoinGuildAsync(this RestClient<IUserClient> client, string invCode, string captchaKey = null)
         {
             return (await client.HttpClient.PostAsync($"/invites/{invCode}", captchaKey != null ? $"{{\"captcha_key\":\"{captchaKey}\"}}" : null))
                                 .Deserialize<GuildInvite>().SetClient(client);
@@ -193,7 +193,7 @@ namespace Discord
         /// Joins a guild
         /// </summary>
         /// <returns>The invite used to join the guild</returns>
-        public static GuildInvite JoinGuild(this IRestClient client, string invCode)
+        public static GuildInvite JoinGuild(this RestClient<IUserClient> client, string invCode)
         {
             return client.JoinGuildAsync(invCode).GetAwaiter().GetResult();
         }

@@ -53,7 +53,7 @@ namespace Discord
             return client.LurkGuildAsync(guildId).GetAwaiter().GetResult();
         }
 
-        public static async Task<DiscordGuild> JoinGuildAsync(this IRestClient client, ulong guildId)
+        public static async Task<DiscordGuild> JoinGuildAsync(this RestClient<IUserClient> client, ulong guildId)
         {
             return (await client.HttpClient.PutAsync($"/guilds/{guildId}/members/@me?lurker=false"))
                                 .Deserialize<DiscordGuild>().SetClient(client);
@@ -64,7 +64,7 @@ namespace Discord
         /// </summary>
         /// <param name="guildId">ID of the guild</param>
         /// <returns></returns>
-        public static DiscordGuild JoinGuild(this IRestClient client, ulong guildId)
+        public static DiscordGuild JoinGuild(this RestClient<IUserClient> client, ulong guildId)
         {
             return client.JoinGuildAsync(guildId).GetAwaiter().GetResult();
         }
