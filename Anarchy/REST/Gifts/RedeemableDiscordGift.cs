@@ -23,7 +23,7 @@ namespace Discord
 
         public async Task RedeemAsync(ulong? channelId = null)
         {
-            await ((RestClient<IUserClient>)Client).RedeemGiftAsync(Code, channelId);
+            await ((RestClient<IUserAccount>)Client).RedeemGiftAsync(Code, channelId);
         }
 
         public void Redeem(ulong? channelId = null)
@@ -33,7 +33,7 @@ namespace Discord
 
         public async Task RevokeAsync()
         {
-            await ((RestClient<IUserClient>)Client).RevokeGiftCodeAsync(Code);
+            await ((RestClient<IUserAccount>)Client).RevokeGiftCodeAsync(Code);
         }
 
         public void Revoke()

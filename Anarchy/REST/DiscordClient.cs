@@ -66,15 +66,11 @@
         }
     }
 
-    public interface IBotClient
+    public interface IBotAccount
     {
     }
 
-    public interface IUserClient
-    {
-    }
-
-    public interface IWebhookClient
+    public interface IUserAccount
     {
     }
 }

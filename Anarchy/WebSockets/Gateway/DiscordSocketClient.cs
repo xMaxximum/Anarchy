@@ -137,12 +137,13 @@ namespace Discord.Gateway
 
         private ulong _appId;
 
-        public DiscordSocketClient(DiscordSocketConfig config = null) : base()
+        public DiscordSocketClient(IRestClient restClient, DiscordSocketConfig config = null) : base()
         {
+            restClient = RestClient;
+
             RequestLock = new object();
 
-            if (config == null)
-                config = new DiscordSocketConfig();
+            config ??= new DiscordSocketConfig();
 
             Config = new LockedSocketConfig(config);
 
@@ -175,7 +176,7 @@ namespace Discord.Gateway
                 if (LoggedIn && (lostConnection || err == GatewayCloseCode.RateLimited || err == GatewayCloseCode.SessionTimedOut || err == GatewayCloseCode.UnknownError))
                 {
                     LoggedIn = false;
-                    Login(RestClient.Token);
+                    Login();
                 }
                 else
                 {
@@ -207,13 +208,10 @@ namespace Discord.Gateway
             Dispose(true);
         }
 
-        public void Login(string token)
+        public void Login()
         {
-            if (RestClient.Token != token)
-                RestClient.Token = token;
-
             if (RestClient.User.Type == DiscordUserType.Bot && Config.ApiVersion >= 8 && !Config.Intents.HasValue)
-                throw new ArgumentNullException(nameof(token), "Gateway intents must be provided as of API v8");
+                throw new ArgumentNullException(nameof(RestClient.Token), "Gateway intents must be provided as of API v8");
 
             State = GatewayConnectionState.Connecting;
 
