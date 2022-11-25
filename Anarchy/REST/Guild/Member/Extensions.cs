@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -67,7 +68,7 @@ namespace Discord
             foreach (var role in properties.IncludedRoles)
                 url += "&include_roles=" + role;
 
-            return (await client.HttpClient.GetAsync(url)).Deserialize<JsonElement>().GetProperty("pruned").GetUInt32();
+            return (await client.HttpClient.GetAsync(url)).Deserialize<JsonObject>()["pruned"].GetValue<uint>();
         }
 
         public static uint GetGuildPrunableMembers(this IRestClient client, ulong guildId, MemberPruneProperties properties)
@@ -78,7 +79,7 @@ namespace Discord
         public static async Task<uint> PruneGuildMembersAsync(this IRestClient client, ulong guildId, MemberPruneProperties properties)
         {
             return (await client.HttpClient.PostAsync($"/guilds/{guildId}/prune", properties))
-                                    .Deserialize<JsonElement>().GetProperty("pruned").GetUInt32();
+                                    .Deserialize<JsonObject>()["pruned"].GetValue<uint>();
         }
 
         public static uint PruneGuildMembers(this IRestClient client, ulong guildId, MemberPruneProperties properties)

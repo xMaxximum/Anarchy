@@ -141,12 +141,12 @@ namespace Discord
 
         public static async Task<IReadOnlyList<DiscordChannelSettings>> SetPrivateChannelSettingsAsync(this IRestClient client, Dictionary<ulong, ChannelSettingsProperties> channels)
         {
-            JsonElement container = new JsonNode
+            JsonObject container = new JsonObject
             {
                 ["channel_overrides"] = JsonSerializer.Serialize(channels)
             };
 
-            return (await client.HttpClient.PatchAsync($"/users/@me/guilds/@me/settings", container)).Deserialize<JObject>()["channel_overrides"].ToObject<List<DiscordChannelSettings>>();
+            return (await client.HttpClient.PatchAsync($"/users/@me/guilds/@me/settings", container)).Deserialize<JsonObject>()["channel_overrides"].Deserialize<List<DiscordChannelSettings>>();
         }
 
         public static IReadOnlyList<DiscordChannelSettings> SetPrivateChannelSettings(this IRestClient client, Dictionary<ulong, ChannelSettingsProperties> channels)
@@ -234,7 +234,7 @@ namespace Discord
                 new MemoryStream(
                     await new HttpClient().GetByteArrayAsync(
                         (await client.HttpClient.GetAsync($"https://discordapp.com/api/v6/streams/guild:{guildId}:{channelId}:{userId}/preview?version=1589053944368"))
-                            .Deserialize<JsonElement>().GetProperty("url").GetString()
+                            .Deserialize<JsonObject>()["url"].GetValue<string>()
                     )
                 )
             );

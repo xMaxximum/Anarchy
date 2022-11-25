@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Discord
 {
@@ -86,26 +87,26 @@ namespace Discord
         private readonly List<ulong> _restrictedGuilds;
         public IReadOnlyList<MinimalGuild> RestrictedGuilds => _restrictedGuilds.Select(id => new MinimalGuild(id).SetClient(Client)).ToList();
 
-        internal void Update(JsonElement jObj)
+        internal void Update(JsonObject jObj)
         {
-            //foreach (var property in this.GetType().GetProperties())
-            //{
-            //    foreach (var attr in property.GetCustomAttributes(false))
-            //    {
-            //        if (attr.GetType() == typeof(JsonPropertyNameAttribute))
-            //        {
-            //            var jsonAttr = (JsonPropertyNameAttribute) attr;
+            foreach (var property in this.GetType().GetProperties())
+            {
+                foreach (var attr in property.GetCustomAttributes(false))
+                {
+                    if (attr.GetType() == typeof(JsonPropertyNameAttribute))
+                    {
+                        var jsonAttr = (JsonPropertyNameAttribute) attr;
 
-            //            if (jObj.TryGetValue(jsonAttr.PropertyName, out JToken value))
-            //                property.SetValue(this, value.ToObject(property.PropertyType));
+                        if (jObj.TryGetPropertyValue(jsonAttr.Name, out var value))
+                            property.SetValue(this, value);
 
-            //            break;
-            //        }
-            //    }
-            //}
+                        break;
+                    }
+                }
+            }
 
-            //if (jObj.TryGetValue("theme", out JToken theme))
-            //    _theme = theme.ToObject<string>();
+            if (jObj.TryGetPropertyValue("theme", out var theme))
+                _theme = theme.ToString();
         }
     }
 }

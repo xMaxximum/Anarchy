@@ -4,7 +4,7 @@ namespace Discord
     public interface IRestClient
     {
         DiscordClientUser User { get; set; }
-        LockedDiscordConfig Config { get; set; }
+        LockedDiscordConfig Config { get; }
         DiscordHttpClient HttpClient { get; }
 
         string Token { get; set; }
@@ -59,6 +59,7 @@ namespace Discord
             Config = new LockedDiscordConfig(config);
 
             Token = token;
+            User = this.GetClientUser();
         }
 
         public override string ToString()

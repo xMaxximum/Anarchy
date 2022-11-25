@@ -59,7 +59,7 @@ namespace Discord
                 => client.GetThreadMembersAsync(threadId).GetAwaiter().GetResult();
 
         public static async Task<IReadOnlyList<DiscordThread>> GetChannelActiveThreadsAsync(this IRestClient client, ulong channelId)
-                => (await client.HttpClient.GetAsync($"/channels/{channelId}/threads/active")).Body.GetProperty("threads").Deserialize<List<DiscordThread>>();
+                => (await client.HttpClient.GetAsync($"/channels/{channelId}/threads/active")).Body["threads"].Deserialize<List<DiscordThread>>();
 
         public static IReadOnlyList<DiscordThread> GetChannelActiveThreads(this IRestClient client, ulong channelId)
                 => client.GetChannelActiveThreadsAsync(channelId).GetAwaiter().GetResult();

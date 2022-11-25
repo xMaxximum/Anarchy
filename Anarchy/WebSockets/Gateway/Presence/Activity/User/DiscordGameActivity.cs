@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using System;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Discord.Gateway
 {
@@ -10,14 +11,14 @@ namespace Discord.Gateway
         public string ApplicationId { get; private set; }
 
         [JsonPropertyName("timestamps")]
-        private readonly JsonElement _obj;
+        private readonly JsonObject _obj;
 
         public DateTimeOffset? Since
         {
             get
             {
-                if (_obj.ValueKind == JsonValueKind.Null)
-                    return DateTimeOffset.FromUnixTimeMilliseconds(_obj.GetProperty("start").GetInt64());
+                if (_obj != null)
+                    return DateTimeOffset.FromUnixTimeMilliseconds(_obj["start"].GetValue<long>());
                 else
                     return null;
             }

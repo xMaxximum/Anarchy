@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
-
+using System.Text.Json.Nodes;
 
 namespace Discord
 {
@@ -17,7 +17,7 @@ namespace Discord
                 PaymentMethodId = paymentMethodId,
                 SkuPlanId = subPlanId,
                 ExpectedAmount = expectedAmount
-            })).Deserialize<JsonElement>().GetProperty("gift_code").GetString();
+            })).Deserialize<JsonObject>()["gift_code"].GetValue<string>();
         }
 
         public static string PurchaseGift(this RestClient<IUserAccount> client, ulong paymentMethodId, ulong skuId, ulong subPlanId, int expectedAmount)

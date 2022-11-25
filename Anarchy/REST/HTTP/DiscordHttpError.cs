@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
 
@@ -11,7 +12,7 @@ namespace Discord
         public DiscordError Code { get; private set; }
 
         [JsonPropertyName("errors")]
-        public JsonElement Fields { get; private set; }
+        public JsonObject Fields { get; private set; }
 
         [JsonPropertyName("message")]
         public string Message { get; private set; }

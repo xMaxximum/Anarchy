@@ -1,11 +1,12 @@
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Discord.Gateway
 {
     public class GiftCodeUpdatedEventArgs : GiftCodeCreatedEventArgs
     {
-        public JsonElement Json { get; internal set; }
+        public JsonObject Json { get; internal set; }
 
         [JsonPropertyName("uses")]
         public uint Uses { get; private set; }

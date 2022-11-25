@@ -124,7 +124,7 @@ namespace Discord.Media
                             Token = _server.Token,
                             Video = true
                         });
-                        StartHeartbeaterAsync(message.Data.GetProperty("heartbeat_interval").GetInt32());
+                        StartHeartbeaterAsync(message.Data["heartbeat_interval"].GetValue<int>());
                         break;
                     default:
                         OnMessage?.Invoke(this, message);

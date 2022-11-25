@@ -1,9 +1,8 @@
-using System.Text.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Linq;
 
 namespace Discord
 {
@@ -19,18 +18,18 @@ namespace Discord
             Code = error.Code;
             ErrorMessage = error.Message;
 
-            if (error.Fields.EnumerateObject().Any())
+            if (error.Fields.Any())
                 InvalidFields = FindErrors(error.Fields);
         }
 
-        private static FieldErrorDictionary FindErrors(JsonDocument obj)
+        private static FieldErrorDictionary FindErrors(JsonObject obj)
         {
             var dict = new FieldErrorDictionary();
 
-            foreach (JsonObject child in obj.Deserialize<List<JsonObject>>())
+            foreach (var child in obj)
             {
-                if (child.First().Key == "_errors") dict.Errors = child.First().Value.Deserialize<List<DiscordFieldError>>();
-                else dict[child.First().Key] = FindErrors(child.First().Value);
+                if (child.Key == "_errors") dict.Errors = child.Value.Deserialize<List<DiscordFieldError>>();
+                else dict[child.Key] = FindErrors(child.Value.AsObject());
             }
 
             return dict;

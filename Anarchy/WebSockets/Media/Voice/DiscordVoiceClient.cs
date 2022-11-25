@@ -88,7 +88,7 @@ namespace Discord.Media
                     _ssrcToUserDictionary[update.Audio] = update.UserId;
                     break;
                 case DiscordMediaOpcode.UserDisconnect:
-                    ulong userId = message.Data.GetProperty("user_id").GetUInt64();
+                    ulong userId = message.Data["user_id"].GetValue<ulong>();
 
                     if (_ssrcToUserDictionary.TryGetKey(userId, out uint ssrc))
                         _ssrcToUserDictionary.Remove(ssrc);

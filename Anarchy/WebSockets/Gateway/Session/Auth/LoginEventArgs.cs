@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Discord.Gateway
 {
@@ -42,7 +43,7 @@ namespace Discord.Gateway
         public DiscordUserSettings Settings { get; private set; }
 
         [JsonPropertyName("guilds")]
-        private readonly List<JsonElement> _guilds;
+        private readonly List<JsonObject> _guilds;
 
         public IReadOnlyList<MinimalGuild> Guilds { get; private set; }
 
@@ -68,7 +69,7 @@ namespace Discord.Gateway
         public IReadOnlyList<DiscordPresence> Presences { get; private set; }
 
         [JsonPropertyName("application")]
-        internal JsonElement Application { get; private set; }
+        internal JsonObject Application { get; private set; }
 
         public override string ToString()
         {

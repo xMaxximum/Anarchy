@@ -87,7 +87,7 @@ namespace Discord.Media
             }
             else if (message.Opcode == DiscordMediaOpcode.UserDisconnect)
             {
-                ulong userId = message.Data.GetProperty("user_id").GetUInt64();
+                ulong userId = message.Data["user_id"].GetValue<ulong>();
 
                 List<ulong> viewers = Viewers.ToList();
                 if (viewers.Remove(userId))

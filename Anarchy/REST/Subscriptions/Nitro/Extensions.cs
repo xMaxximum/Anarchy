@@ -40,7 +40,7 @@ namespace Discord
 
         public static async Task<DiscordActiveSubscription> SetAdditionalBoostsAsync(this RestClient<IUserAccount> client, ulong paymentMethodId, ulong activeSubscriptionId, uint amount)
         {
-            string plan = JsonConvert.SerializeObject(new AdditionalSubscriptionPlan() { Id = DiscordNitroSubTypes.GuildBoost.SubscriptionPlanId, Quantity = (int) amount });
+            string plan = JsonSerializer.Serialize(new AdditionalSubscriptionPlan() { Id = DiscordNitroSubTypes.GuildBoost.SubscriptionPlanId, Quantity = (int) amount });
 
             return (await client.HttpClient.PatchAsync("/users/@me/billing/subscriptions/" + activeSubscriptionId, $"{{\"payment_source_id\":{paymentMethodId},\"additional_plans\":[{plan}]}}")).Deserialize<DiscordActiveSubscription>();
         }

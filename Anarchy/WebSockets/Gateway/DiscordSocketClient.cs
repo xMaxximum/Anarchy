@@ -139,6 +139,7 @@ namespace Discord.Gateway
 
         public DiscordSocketClient(IRestClient restClient, DiscordSocketConfig config = null) : base()
         {
+            Console.WriteLine($"name: {restClient.GetClientUser().Username}");
             restClient = RestClient;
 
             RequestLock = new object();
@@ -288,7 +289,7 @@ namespace Discord.Gateway
                         case "READY":
                             LoginEventArgs login = message.Data.Deserialize<LoginEventArgs>().SetClient(this.RestClient);
 
-                            if (login.Application.ValueKind != JsonValueKind.Null) _appId = login.Application.GetProperty("id").GetUInt64();
+                            if (login.Application != null) _appId = login.Application["id"].GetValue<ulong>();
 
                             this.RestClient.User = login.User;
                             this.UserSettings = RestClient.User.Type == DiscordUserType.User ? login.Settings : null;
@@ -745,7 +746,7 @@ namespace Discord.Gateway
                             if (Config.Cache || OnRinging != null)
                             {
                                 var call = message.Data.Deserialize<DiscordCall>().SetClient(this.RestClient);
-                                var voiceStates = message.Data.GetProperty("voice_states").Deserialize<IReadOnlyList<DiscordVoiceState>>().SetClientsInList(this.RestClient);
+                                var voiceStates = message.Data["voice_states"].Deserialize<IReadOnlyList<DiscordVoiceState>>().SetClientsInList(this.RestClient);
 
                                 if (Config.Cache)
                                 {
@@ -764,7 +765,7 @@ namespace Discord.Gateway
                         case "CALL_DELETE":
                             if (Config.Cache || OnCallEnded != null)
                             {
-                                ulong channelId = message.Data.GetProperty("channel_id").GetUInt64();
+                                ulong channelId = message.Data["channel_id"].GetValue<ulong>();
 
                                 if (Config.Cache)
                                 {
@@ -944,7 +945,7 @@ namespace Discord.Gateway
 
                     Task.Run(() =>
                     {
-                        int interval = message.Data.GetProperty("heartbeat_interval").GetInt32() - 1000;
+                        int interval = message.Data["heartbeat_interval"].GetValue<int>() - 1000;
                         try
                         {
                             while (true)

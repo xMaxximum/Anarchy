@@ -13,19 +13,19 @@ namespace Discord
         public static void ValidateResponse(HttpResponseMessage response)
         {
             string content = response.Content.ReadAsStringAsync().Result;
-            JsonElement body = (content != null && content.Length != 0) ? JsonNode.Parse(content).Deserialize<JsonElement>() : throw new System.Exception("Couldn't validate response");
+            JsonObject body = (content != null && content.Length != 0) ? JsonNode.Parse(content).Deserialize<JsonObject>() : throw new System.Exception("Couldn't validate response");
 
             ValidateResponse(response, body);
         }
 
-        public static void ValidateResponse(HttpResponseMessage response, JsonElement body)
+        public static void ValidateResponse(HttpResponseMessage response, JsonObject body)
         {
             int statusCode = (int) response.StatusCode;
 
             if (statusCode >= 400)
             {
                 if (statusCode == 429)
-                    throw new RateLimitException(body.GetProperty("retry_after").GetInt32());
+                    throw new RateLimitException(body["retry_after"].GetValue<int>());
                 else
                     throw new DiscordHttpException(body.Deserialize<DiscordHttpError>());
             }

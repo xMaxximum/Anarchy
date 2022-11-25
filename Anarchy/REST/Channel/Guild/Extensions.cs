@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
-
+using System.Text.Json.Nodes;
 
 namespace Discord
 {
@@ -83,7 +83,7 @@ namespace Discord
 
         public static async Task<ulong> FollowChannelAsync(this IRestClient client, ulong channelToFollowId, ulong crosspostChannelId)
         {
-            return (await client.HttpClient.PostAsync($"/channels/{channelToFollowId}/followers", $"{{\"webhook_channel_id\":{crosspostChannelId}}}")).Deserialize<JsonElement>().GetProperty("webhook_id").GetUInt64();
+            return (await client.HttpClient.PostAsync($"/channels/{channelToFollowId}/followers", $"{{\"webhook_channel_id\":{crosspostChannelId}}}")).Deserialize<JsonObject>()["webhook_od"].GetValue<ulong>();
         }
 
         public static ulong FollowChannel(this IRestClient client, ulong channelToFollowId, ulong crosspostChannelId)

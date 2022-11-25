@@ -8,13 +8,13 @@ namespace Discord
     public class DiscordHttpResponse
     {
         public int StatusCode { get; private set; }
-        public JsonElement Body { get; private set; }
+        public JsonObject Body { get; private set; }
 
         public DiscordHttpResponse(int statusCode, string content)
         {
             StatusCode = statusCode;
             if (content != null && content.Length != 0)
-                Body = JsonNode.Parse(content).Deserialize<JsonElement>();
+                Body = JsonNode.Parse(content).Deserialize<JsonObject>();
         }
 
         public T Deserialize<T>()

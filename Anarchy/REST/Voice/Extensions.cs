@@ -10,7 +10,7 @@ namespace Discord
     {
         public static async Task RingAsync(this RestClient<IUserAccount> client, ulong channelId, List<ulong> recipients)
         {
-            await client.HttpClient.PostAsync($"/channels/{channelId}/call/ring", new 
+            await client.HttpClient.PostAsync($"/channels/{channelId}/call/ring", new JsonObject
             {
                 ["recipients"] = recipients == null ? null : JsonSerializer.Serialize(recipients)
             });
@@ -39,9 +39,9 @@ namespace Discord
 
         public static async Task StopRingingAsync(this RestClient<IUserAccount> client, ulong channelId, List<ulong> recipients)
         {
-            await client.HttpClient.PostAsync($"/channels/{channelId}/call/stop-ringing", new JObject
+            await client.HttpClient.PostAsync($"/channels/{channelId}/call/stop-ringing", new JsonObject
             {
-                ["recipients"] = recipients == null ? null : JArray.FromObject(recipients)
+                ["recipients"] = recipients == null ? null : JsonSerializer.Serialize(recipients)
             });
         }
 

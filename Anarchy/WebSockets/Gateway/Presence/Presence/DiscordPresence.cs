@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Discord.Gateway
 {
@@ -16,14 +17,14 @@ namespace Discord.Gateway
         }
 
         [JsonPropertyName("user")]
-        private readonly JsonElement _user;
+        private readonly JsonObject _user;
 
         public ulong UserId
         {
-            get { return _user.GetProperty("id").GetUInt64(); }
+            get { return _user["id"].GetValue<ulong>(); }
         }
 
-        private readonly DiscordParameter<List<DiscordActivity>> _activitiesParam = new DiscordParameter<List<DiscordActivity>>();
+        private readonly DiscordParameter<List<DiscordActivity>> _activitiesParam = new();
         [JsonPropertyName("activities")]
         //[JsonConverter(typeof(DeepJsonConverter<DiscordActivity>))]
         private List<DiscordActivity> _activities
@@ -42,7 +43,7 @@ namespace Discord.Gateway
             get { return _activitiesParam.Set; }
         }
 
-        private readonly DiscordParameter<UserStatus> _statusParam = new DiscordParameter<UserStatus>();
+        private readonly DiscordParameter<UserStatus> _statusParam = new();
         [JsonPropertyName("status")]
         public UserStatus Status
         {
@@ -55,7 +56,7 @@ namespace Discord.Gateway
             get { return _statusParam.Set; }
         }
 
-        private readonly DiscordParameter<ActiveSessionPlatforms> _platformsParam = new DiscordParameter<ActiveSessionPlatforms>();
+        private readonly DiscordParameter<ActiveSessionPlatforms> _platformsParam = new();
         [JsonPropertyName("client_status")]
         public ActiveSessionPlatforms ActivePlatforms
         {
