@@ -61,7 +61,7 @@ namespace Discord
 
         public async Task AddRecipientAsync(ulong userId)
         {
-            await Client.AddUserToGroupAsync(Id, userId);
+            await ((RestClient<IUserAccount>)Client).AddUserToGroupAsync(Id, userId);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Discord
 
         public async Task RemoveRecipientAsync(ulong userId)
         {
-            await Client.RemoveUserFromGroupAsync(Id, userId);
+            await ((RestClient<IUserAccount>)Client).RemoveUserFromGroupAsync(Id, userId);
         }
 
         /// <summary>

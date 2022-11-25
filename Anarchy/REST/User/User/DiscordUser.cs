@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Discord.Commands;
-using Newtonsoft.Json;
 
 namespace Discord
 {
@@ -9,16 +9,16 @@ namespace Discord
     {
         protected static DiscordBadge HypeBadges = DiscordBadge.HypeBravery | DiscordBadge.HypeBrilliance | DiscordBadge.HypeBalance;
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public ulong Id { get; private set; }
 
-        [JsonProperty("username")]
+        [JsonPropertyName("username")]
         public string Username { get; private set; }
 
-        [JsonProperty("discriminator")]
+        [JsonPropertyName("discriminator")]
         public uint Discriminator { get; private set; }
 
-        [JsonProperty("avatar")]
+        [JsonPropertyName("avatar")]
         protected string _avatarHash;
 
         public DiscordCDNImage Avatar
@@ -33,10 +33,10 @@ namespace Discord
         }
 
         // understanding what public flags are is difficult because of the lack of documentation
-        [JsonProperty("public_flags")]
+        [JsonPropertyName("public_flags")]
         private DiscordBadge _publicFlags;
 
-        [JsonProperty("flags")]
+        [JsonPropertyName("flags")]
         private DiscordBadge _flags;
 
         public DiscordBadge Badges
@@ -54,7 +54,7 @@ namespace Discord
             }
         }
 
-        [JsonProperty("bot")]
+        [JsonPropertyName("bot")]
         private readonly bool _bot;
 
         public DiscordUserType Type
@@ -115,7 +115,7 @@ namespace Discord
 
         public async Task<DiscordProfile> GetProfileAsync()
         {
-            return await Client.GetProfileAsync(Id);
+            return await ((RestClient<IUserAccount>)Client).GetProfileAsync(Id);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Discord
             if (Id == Client.User.Id)
                 throw new NotSupportedException("Cannot send a friend request to self.");
 
-            await Client.SendFriendRequestAsync(Username, Discriminator);
+            await ((RestClient<IUserAccount>)Client).SendFriendRequestAsync(Username, Discriminator);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace Discord
             if (Id == Client.User.Id)
                 throw new NotSupportedException("Cannot block self.");
 
-            await Client.BlockUserAsync(Id);
+            await ((RestClient<IUserAccount>)Client).BlockUserAsync(Id);
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace Discord
             if (Id == Client.User.Id)
                 throw new NotSupportedException("Cannot remove relationship from self.");
 
-            await Client.RemoveRelationshipAsync(Id);
+            await ((RestClient<IUserAccount>)Client).RemoveRelationshipAsync(Id);
         }
 
         /// <summary>

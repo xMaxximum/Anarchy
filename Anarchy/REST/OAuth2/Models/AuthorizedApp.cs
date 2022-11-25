@@ -17,7 +17,7 @@ namespace Discord
 
         public async Task DeauthorizeAsync()
         {
-            await Client.DeauthorizeAppAsync(Id);
+            await ((RestClient<IUserAccount>)Client).DeauthorizeAppAsync(Id);
         }
 
         public void Deauthorize()

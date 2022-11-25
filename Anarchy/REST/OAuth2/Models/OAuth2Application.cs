@@ -75,7 +75,7 @@ namespace Discord
 
         public async Task UpdateAsync()
         {
-            Update(await Client.GetApplicationAsync(Id));
+            Update(await ((RestClient<IUserAccount>)Client).GetApplicationAsync(Id));
         }
 
         public void Update()
@@ -85,7 +85,7 @@ namespace Discord
 
         public async Task ModifyAsync(DiscordApplicationProperties properties)
         {
-            Update(await Client.ModifyApplicationAsync(Id, properties));
+            Update(await ((RestClient<IUserAccount>)Client).ModifyApplicationAsync(Id, properties));
         }
 
         public void Modify(DiscordApplicationProperties properties)
@@ -95,12 +95,12 @@ namespace Discord
 
         public ApplicationBot AddBot()
         {
-            return Bot = Client.AddBotToApplication(Id);
+            return Bot = ((RestClient<IUserAccount>)Client).AddBotToApplication(Id);
         }
 
         public async Task DeleteAsync()
         {
-            await Client.DeleteApplicationAsync(Id);
+            await ((RestClient<IUserAccount>)Client).DeleteApplicationAsync(Id);
         }
 
         public void Delete()

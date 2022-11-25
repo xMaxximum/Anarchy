@@ -13,7 +13,7 @@ namespace Discord
 
         public async Task ModifyAsync(ConnectionProperties properties)
         {
-            var update = await Client.ModifyConnectedAccountAsync(Type, Id, properties);
+            var update = await ((RestClient<IUserAccount>)Client).ModifyConnectedAccountAsync(Type, Id, properties);
 
             Name = update.Name;
             Verified = update.Verified;
@@ -28,7 +28,7 @@ namespace Discord
 
         public async Task RemoveAsync()
         {
-            await Client.RemoveConnectedAccountAsync(Type, Id);
+            await ((RestClient<IUserAccount>)Client).RemoveConnectedAccountAsync(Type, Id);
         }
 
         public void Remove()

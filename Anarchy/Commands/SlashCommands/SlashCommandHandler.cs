@@ -139,7 +139,7 @@ namespace Discord.Commands
             if (guildId.HasValue)
                 _client.HttpClient.PutAsync($"/applications/{appId}/guilds/{guildId.Value}/commands", _commands).GetAwaiter().GetResult();
             else
-                _client.RestClient.SetGlobalApplicationCommands(appId, _commands);
+                ((RestClient<IBotAccount>)_client.RestClient).SetGlobalApplicationCommands(appId, _commands);
 
             client.OnInteraction += Client_OnInteraction;
         }

@@ -72,10 +72,10 @@ namespace Discord.Gateway
         [JsonProperty("message")]
         public DiscordMessage Message { get; private set; }
 
-        public Task RespondAsync(InteractionCallbackType callbackType, InteractionResponseProperties properties = null) => Client.RespondToInteractionAsync(Id, Token, callbackType, properties);
+        public Task RespondAsync(InteractionCallbackType callbackType, InteractionResponseProperties properties = null) => ((RestClient<IBotAccount>)Client).RespondToInteractionAsync(Id, Token, callbackType, properties);
         public void Respond(InteractionCallbackType callbackType, InteractionResponseProperties properties = null) => RespondAsync(callbackType, properties).GetAwaiter().GetResult();
 
-        public Task ModifyResponseAsync(InteractionResponseProperties changes) => Client.ModifyInteractionResponseAsync(ApplicationId, Token, changes);
+        public Task ModifyResponseAsync(InteractionResponseProperties changes) => ((RestClient<IBotAccount>)Client).ModifyInteractionResponseAsync(ApplicationId, Token, changes);
         public void ModifyResponse(InteractionResponseProperties changes) => ModifyResponseAsync(changes).GetAwaiter().GetResult();
     }
 }

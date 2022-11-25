@@ -29,7 +29,7 @@ namespace Discord
 
         public async Task RemoveAsync()
         {
-            await Client.RemoveGuildBoostAsync(_guildId, Id);
+            await ((RestClient<IUserAccount>)Client).RemoveGuildBoostAsync(_guildId, Id);
         }
 
         public void Remove()

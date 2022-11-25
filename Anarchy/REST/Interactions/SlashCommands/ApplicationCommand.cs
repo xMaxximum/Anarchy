@@ -28,13 +28,13 @@ namespace Discord
             Options = updated.Options;
         }
 
-        public async Task UpdateAsync() => Update(await Client.GetGlobalCommandAsync(ApplicationId, Id));
+        public async Task UpdateAsync() => Update(await ((RestClient<IBotAccount>)Client).GetGlobalCommandAsync(ApplicationId, Id));
         public void Update() => UpdateAsync().GetAwaiter().GetResult();
 
-        public async Task ModifyAsync(ApplicationCommandProperties properties) => Update(await Client.ModifyGlobalCommandAsync(ApplicationId, Id, properties));
+        public async Task ModifyAsync(ApplicationCommandProperties properties) => Update(await ((RestClient<IBotAccount>)Client).ModifyGlobalCommandAsync(ApplicationId, Id, properties));
         public void Modify(ApplicationCommandProperties properties) => ModifyAsync(properties).GetAwaiter().GetResult();
 
-        public Task DeleteAsync() => Client.DeleteGlobalCommandAsync(ApplicationId, Id);
+        public Task DeleteAsync() => ((RestClient<IBotAccount>)Client).DeleteGlobalCommandAsync(ApplicationId, Id);
         public void Delete() => DeleteAsync().GetAwaiter().GetResult();
     }
 }

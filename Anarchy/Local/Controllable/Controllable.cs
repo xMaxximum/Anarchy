@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Discord
 {
@@ -23,6 +23,7 @@ namespace Discord
         public void Dispose()
         {
             _client = null;
+            GC.SuppressFinalize(this);
         }
     }
 }

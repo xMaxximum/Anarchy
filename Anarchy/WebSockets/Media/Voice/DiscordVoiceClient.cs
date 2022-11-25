@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using Discord.Gateway;
 using Discord.WebSockets;
 using Newtonsoft.Json.Linq;
@@ -76,17 +77,17 @@ namespace Discord.Media
             switch (message.Opcode)
             {
                 case DiscordMediaOpcode.Speaking:
-                    var state = message.Data.ToObject<DiscordSpeakingState>();
+                    var state = message.Data.Deserialize<DiscordSpeakingState>();
 
                     if (state.UserId.HasValue)
                         _ssrcToUserDictionary[state.SSRC] = state.UserId.Value;
                     break;
                 case DiscordMediaOpcode.SSRCUpdate:
-                    SSRCUpdate update = message.Data.ToObject<SSRCUpdate>();
+                    SSRCUpdate update = message.Data.Deserialize<SSRCUpdate>();
                     _ssrcToUserDictionary[update.Audio] = update.UserId;
                     break;
                 case DiscordMediaOpcode.UserDisconnect:
-                    ulong userId = message.Data.ToObject<JObject>().Value<ulong>("user_id");
+                    ulong userId = message.Data.GetProperty("user_id").GetUInt64();
 
                     if (_ssrcToUserDictionary.TryGetKey(userId, out uint ssrc))
                         _ssrcToUserDictionary.Remove(ssrc);

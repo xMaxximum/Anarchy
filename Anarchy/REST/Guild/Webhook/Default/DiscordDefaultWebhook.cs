@@ -13,7 +13,7 @@ namespace Discord
 
         public DiscordDefaultWebhook(ulong webhookId, string token) : this()
         {
-            Client = new RestClient<IWebhookClient>();
+            // Client = new RestClient();
             Update((DiscordDefaultWebhook) Client.GetWebhook(webhookId, token));
         }
 

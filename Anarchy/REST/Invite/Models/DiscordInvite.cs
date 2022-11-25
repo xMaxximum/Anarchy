@@ -50,9 +50,9 @@ namespace Discord
         public async Task JoinAsync()
         {
             if (Type == InviteType.Guild)
-                await Client.JoinGuildAsync(Code);
+                await ((RestClient<IUserAccount>)Client).JoinGuildAsync(Code);
             else
-                await Client.JoinGroupAsync(Code);
+                await ((RestClient<IUserAccount>)Client).JoinGroupAsync(Code);
         }
 
         public void Join()

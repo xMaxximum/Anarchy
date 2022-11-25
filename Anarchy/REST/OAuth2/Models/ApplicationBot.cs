@@ -22,7 +22,7 @@ namespace Discord
 
         public async Task AuthorizeAsync(ulong guildId, DiscordPermission permissions, string captchaKey)
         {
-            await Client.AuthorizeBotAsync(Id, guildId, permissions, captchaKey);
+            await ((RestClient<IUserAccount>)Client).AuthorizeBotAsync(Id, guildId, permissions, captchaKey);
         }
 
         public void Authorize(ulong guildId, DiscordPermission permissions, string captchaKey)

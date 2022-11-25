@@ -18,7 +18,7 @@ namespace Discord
 
         public async Task RemoveAsync()
         {
-            await Client.RemoveRelationshipAsync(User.Id);
+            await ((RestClient<IUserAccount>)Client).RemoveRelationshipAsync(User.Id);
         }
 
         public void Remove()

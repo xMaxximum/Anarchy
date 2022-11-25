@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord.Gateway;
@@ -90,7 +91,7 @@ namespace Discord.Media
                 switch (message.Opcode)
                 {
                     case DiscordMediaOpcode.Ready:
-                        DiscordMediaReady ready = message.Data.ToObject<DiscordMediaReady>();
+                        DiscordMediaReady ready = message.Data.Deserialize<DiscordMediaReady>();
 
                         SSRC = new DiscordSSRC() { Audio = ready.SSRC };
                         ServerEndpoint = new IPEndPoint(IPAddress.Parse(ready.IP), ready.Port);
@@ -106,7 +107,7 @@ namespace Discord.Media
                         else SelectProtocol(ServerEndpoint);
                         break;
                     case DiscordMediaOpcode.SessionDescription:
-                        var description = message.Data.ToObject<DiscordSessionDescription>();
+                        var description = message.Data.Deserialize<DiscordSessionDescription>();
 
                         SecretKey = description.SecretKey;
 
@@ -122,7 +123,7 @@ namespace Discord.Media
                             Token = _server.Token,
                             Video = true
                         });
-                        StartHeartbeaterAsync(message.Data.Value<int>("heartbeat_interval"));
+                        StartHeartbeaterAsync(message.Data.GetProperty("heartbeat_interval").GetInt32());
                         break;
                     default:
                         OnMessage?.Invoke(this, message);
@@ -207,7 +208,7 @@ namespace Discord.Media
                                 ip += (char) received[i];
                         }
 
-                        _localEndpoint = new IPEndPoint(IPAddress.Parse(ip), BitConverter.ToUInt16(new byte[] { received[received.Length - 1], received[received.Length - 2] }, 0));
+                        _localEndpoint = new IPEndPoint(IPAddress.Parse(ip), BitConverter.ToUInt16(new byte[] { received[^1], received[^2] }, 0));
 
                         SelectProtocol(_localEndpoint);
                     }

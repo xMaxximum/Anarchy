@@ -21,7 +21,7 @@ namespace Discord
         /// </summary>
         public void Update()
         {
-            DiscordProfile profile = Client.GetProfile(User.Id);
+            DiscordProfile profile = ((RestClient<IUserAccount>)Client).GetProfile(User.Id);
             User = profile.User;
             MutualGuilds = profile.MutualGuilds;
             ConnectedAccounts = profile.ConnectedAccounts;

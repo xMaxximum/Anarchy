@@ -8,7 +8,7 @@ namespace Discord
 {
     internal static class DeepJsonConverter
     {
-        public static readonly Dictionary<Type, Dictionary<int, Type>> RecognizedTypes = new Dictionary<Type, Dictionary<int, Type>>()
+        public static readonly Dictionary<Type, Dictionary<int, Type>> RecognizedTypes = new()
         {
             {
                 typeof(DiscordChannel),
