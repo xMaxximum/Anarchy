@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+
 
 namespace Discord
 {
@@ -15,7 +17,7 @@ namespace Discord
                 PaymentMethodId = paymentMethodId,
                 SkuPlanId = subPlanId,
                 ExpectedAmount = expectedAmount
-            })).Deserialize<JObject>().Value<string>("gift_code");
+            })).Deserialize<JsonElement>().GetProperty("gift_code").GetString();
         }
 
         public static string PurchaseGift(this RestClient<IUserAccount> client, ulong paymentMethodId, ulong skuId, ulong subPlanId, int expectedAmount)
@@ -97,3 +99,4 @@ namespace Discord
         }
     }
 }
+

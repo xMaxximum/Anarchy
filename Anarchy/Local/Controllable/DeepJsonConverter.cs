@@ -1,8 +1,7 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using Discord.Gateway;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Discord
 {
@@ -76,7 +75,7 @@ namespace Discord
             }
         };
     }
-
+    /*
     internal class DeepJsonConverter<T> : JsonConverter
     {
         public override bool CanWrite => false;
@@ -101,4 +100,6 @@ namespace Discord
             throw new NotImplementedException();
         }
     }
+    */
 }
+

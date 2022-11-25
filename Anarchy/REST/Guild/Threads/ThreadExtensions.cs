@@ -1,7 +1,9 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+
 
 namespace Discord
 {
@@ -57,9 +59,10 @@ namespace Discord
                 => client.GetThreadMembersAsync(threadId).GetAwaiter().GetResult();
 
         public static async Task<IReadOnlyList<DiscordThread>> GetChannelActiveThreadsAsync(this IRestClient client, ulong channelId)
-                => (await client.HttpClient.GetAsync($"/channels/{channelId}/threads/active")).Body.Value<JToken>("threads").ToObject<List<DiscordThread>>();
+                => (await client.HttpClient.GetAsync($"/channels/{channelId}/threads/active")).Body.GetProperty("threads").Deserialize<List<DiscordThread>>();
 
         public static IReadOnlyList<DiscordThread> GetChannelActiveThreads(this IRestClient client, ulong channelId)
                 => client.GetChannelActiveThreadsAsync(channelId).GetAwaiter().GetResult();
     }
 }
+

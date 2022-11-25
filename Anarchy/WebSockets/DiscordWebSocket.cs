@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,7 +8,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Discord.WebSockets
 {
@@ -149,7 +150,7 @@ namespace Discord.WebSockets
 
         public void SendMessage<T>(TOpcode op, T data)
         {
-            var message = JsonConvert.SerializeObject(new DiscordWebSocketRequest<T, TOpcode>(op, data));
+            var message = JsonSerializer.Serialize(new DiscordWebSocketRequest<T, TOpcode>(op, data));
             SendMessageAsync(message).GetAwaiter().GetResult();
         }
 
@@ -263,7 +264,7 @@ namespace Discord.WebSockets
                     if (result.MessageType == WebSocketMessageType.Text)
                     {
                         OnMessageReceived.Invoke(this,
-                            JsonConvert.DeserializeObject<DiscordWebSocketMessage<TOpcode>>(Encoding.UTF8.GetString(resultBytes, 0, resultBytes.Length))
+                            JsonSerializer.Deserialize<DiscordWebSocketMessage<TOpcode>>(Encoding.UTF8.GetString(resultBytes, 0, resultBytes.Length))
                         );
                     }
 
@@ -299,3 +300,4 @@ namespace Discord.WebSockets
             => new DiscordWebSocket<TOpcode>(url, proxy);
     }
 }
+

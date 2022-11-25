@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 
 namespace Discord
 {
@@ -10,3 +11,4 @@ namespace Discord
         public static TimeSpan OneWeek = new TimeSpan(7, 0, 0, 0);
     }
 }
+

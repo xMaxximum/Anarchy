@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+
 
 namespace Discord
 {
@@ -7,7 +8,7 @@ namespace Discord
     {
 
         internal readonly DiscordParameter<string> NickProperty = new DiscordParameter<string>();
-        [JsonProperty("nick")]
+        [JsonPropertyName("nick")]
         public string Nickname
         {
             get { return NickProperty; }
@@ -20,7 +21,7 @@ namespace Discord
         }
 
         internal readonly DiscordParameter<List<ulong>> RoleProperty = new DiscordParameter<List<ulong>>();
-        [JsonProperty("roles")]
+        [JsonPropertyName("roles")]
         public List<ulong> Roles
         {
             get { return RoleProperty; }
@@ -33,7 +34,7 @@ namespace Discord
         }
 
         private readonly DiscordParameter<ulong> ChannelProperty = new DiscordParameter<ulong>();
-        [JsonProperty("channel_id")]
+        [JsonPropertyName("channel_id")]
         public ulong ChannelId
         {
             get { return ChannelProperty; }
@@ -41,7 +42,7 @@ namespace Discord
         }
 
         private readonly DiscordParameter<bool> MuteProperty = new DiscordParameter<bool>();
-        [JsonProperty("mute")]
+        [JsonPropertyName("mute")]
         public bool Muted
         {
             get { return MuteProperty; }
@@ -54,7 +55,7 @@ namespace Discord
         }
 
         private readonly DiscordParameter<bool> DeafProperty = new DiscordParameter<bool>();
-        [JsonProperty("deaf")]
+        [JsonPropertyName("deaf")]
         public bool Deafened
         {
             get { return DeafProperty; }
@@ -67,3 +68,4 @@ namespace Discord
         }
     }
 }
+

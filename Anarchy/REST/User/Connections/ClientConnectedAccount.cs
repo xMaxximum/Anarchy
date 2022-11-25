@@ -1,14 +1,15 @@
-﻿using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+
 
 namespace Discord
 {
     public class ClientConnectedAccount : ConnectedAccount
     {
-        [JsonProperty("visibility")]
+        [JsonPropertyName("visibility")]
         public bool Visible { get; private set; }
 
-        [JsonProperty("show_activity")]
+        [JsonPropertyName("show_activity")]
         public bool ShowAsActivity { get; private set; }
 
         public async Task ModifyAsync(ConnectionProperties properties)
@@ -37,3 +38,4 @@ namespace Discord
         }
     }
 }
+

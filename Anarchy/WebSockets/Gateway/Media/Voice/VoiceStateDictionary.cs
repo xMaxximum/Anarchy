@@ -1,4 +1,5 @@
-﻿using Anarchy;
+using System.Text.Json.Serialization;
+using Anarchy;
 
 namespace Discord.Gateway
 {
@@ -17,3 +18,4 @@ namespace Discord.Gateway
         }
     }
 }
+

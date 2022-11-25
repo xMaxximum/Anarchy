@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+
 
 namespace Discord
 {
     public class MinimalGuild : Controllable
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public ulong Id { get; private set; }
 
         public MinimalGuild()
@@ -361,3 +362,4 @@ namespace Discord
         }
     }
 }
+

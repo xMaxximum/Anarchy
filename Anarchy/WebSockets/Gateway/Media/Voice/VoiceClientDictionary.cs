@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using Discord.Media;
 
 namespace Discord.Gateway
@@ -13,3 +14,4 @@ namespace Discord.Gateway
         public DiscordVoiceClient Private { get; }
     }
 }
+

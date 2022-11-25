@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Discord.Gateway;
 
 namespace Discord
@@ -70,3 +71,4 @@ namespace Discord
         }
     }
 }
+

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace Discord
 {
@@ -30,7 +30,7 @@ namespace Discord
 
         public static async Task AuthorizeBotAsync(this RestClient<IUserAccount> client, ulong botId, ulong guildId, DiscordPermission permissions, string captchaKey)
         {
-            await client.HttpClient.PostAsync($"/oauth2/authorize?client_id={botId}&scope=bot", JsonConvert.SerializeObject(new DiscordBotAuthProperties()
+            await client.HttpClient.PostAsync($"/oauth2/authorize?client_id={botId}&scope=bot", JsonSerializer.Serialize(new DiscordBotAuthProperties()
             {
                 GuildId = guildId,
                 Permissions = permissions,
@@ -52,7 +52,7 @@ namespace Discord
 
         public static async Task<string> AuthorizeAppAsync(this RestClient<IUserAccount> client, ulong appId, string scope)
         {
-            return (await client.HttpClient.PostAsync($"/oauth2/authorize?client_id={appId}&response_type=code&scope={scope}")).Deserialize<JObject>().Value<string>("location");
+            return (await client.HttpClient.PostAsync($"/oauth2/authorize?client_id={appId}&response_type=code&scope={scope}")).Deserialize<JsonElement>().GetProperty("location").GetString();
         }
 
         /// <summary>
@@ -154,3 +154,4 @@ namespace Discord
         }
     }
 }
+

@@ -1,4 +1,5 @@
-﻿namespace Discord
+using System.Text.Json.Serialization;
+namespace Discord
 {
     public enum MessageFlags
     {
@@ -9,3 +10,4 @@
         Urgent = 1 << 4
     }
 }
+

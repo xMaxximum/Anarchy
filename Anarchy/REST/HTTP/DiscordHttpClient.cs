@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -7,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Discord
 {
@@ -79,7 +80,6 @@ namespace Discord
                         await response.Content.ReadAsStringAsync()
                     );
                     DiscordHttpUtil.ValidateResponse(response, discordResponse.Body);
-
                     return discordResponse;
                 }
                 catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
@@ -177,7 +177,7 @@ namespace Discord
                 if (payload.GetType() == typeof(string))
                     json = (string) payload;
                 else
-                    json = JsonConvert.SerializeObject(payload, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+                    json = JsonSerializer.Serialize(payload, new JsonSerializerOptions() {  DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
             }
             return json;
         }

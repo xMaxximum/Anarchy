@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Discord
 {
@@ -8,9 +10,9 @@ namespace Discord
     {
         public static async Task RingAsync(this RestClient<IUserAccount> client, ulong channelId, List<ulong> recipients)
         {
-            await client.HttpClient.PostAsync($"/channels/{channelId}/call/ring", new JObject
+            await client.HttpClient.PostAsync($"/channels/{channelId}/call/ring", new 
             {
-                ["recipients"] = recipients == null ? null : JArray.FromObject(recipients)
+                ["recipients"] = recipients == null ? null : JsonSerializer.Serialize(recipients)
             });
         }
 
@@ -79,3 +81,4 @@ namespace Discord
         }
     }
 }
+

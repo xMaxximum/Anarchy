@@ -1,13 +1,14 @@
-﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
 
 namespace Discord.Gateway
 {
     public class InviteDeletedEventArgs : Controllable
     {
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public string Code { get; private set; }
 
-        [JsonProperty("guild_id")]
+        [JsonPropertyName("guild_id")]
         private readonly ulong? _guildId;
 
         public MinimalGuild Guild
@@ -21,7 +22,7 @@ namespace Discord.Gateway
             }
         }
 
-        [JsonProperty("channel_id")]
+        [JsonPropertyName("channel_id")]
         private readonly ulong _channelId;
 
         public MinimalTextChannel Channel
@@ -30,3 +31,4 @@ namespace Discord.Gateway
         }
     }
 }
+

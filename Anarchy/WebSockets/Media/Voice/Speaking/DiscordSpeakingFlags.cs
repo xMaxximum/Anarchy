@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 
 namespace Discord.Media
 {
@@ -11,3 +12,4 @@ namespace Discord.Media
         Priority = 1 << 2
     }
 }
+

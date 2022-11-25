@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
 
 namespace Discord.Gateway
 {
@@ -9,10 +10,10 @@ namespace Discord.Gateway
             OnClientUpdated += (sender, e) => User.SetClient(Client);
         }
 
-        [JsonProperty("user")]
+        [JsonPropertyName("user")]
         public DiscordUser User { get; private set; }
 
-        [JsonProperty("channel_id")]
+        [JsonPropertyName("channel_id")]
         private readonly ulong _channelId;
 
         public MinimalChannel Channel
@@ -21,3 +22,4 @@ namespace Discord.Gateway
         }
     }
 }
+

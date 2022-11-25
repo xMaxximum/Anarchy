@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Discord
@@ -34,3 +35,4 @@ namespace Discord
         public static void DeleteGlobalCommand(this RestClient<IBotAccount> client, ulong appId, ulong commandId) => client.DeleteGlobalCommandAsync(appId, commandId).GetAwaiter().GetResult();
     }
 }
+

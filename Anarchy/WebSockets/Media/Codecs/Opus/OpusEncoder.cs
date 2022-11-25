@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.Runtime.InteropServices;
 
 namespace Discord.Media
@@ -64,3 +65,4 @@ namespace Discord.Media
         }
     }
 }
+

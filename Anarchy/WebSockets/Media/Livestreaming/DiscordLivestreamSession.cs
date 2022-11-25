@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using Discord.Gateway;
-using Newtonsoft.Json.Linq;
+
 
 namespace Discord.Media
 {
@@ -97,3 +98,4 @@ namespace Discord.Media
         }
     }
 }
+

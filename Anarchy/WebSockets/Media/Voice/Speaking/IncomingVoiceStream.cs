@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
@@ -82,3 +83,4 @@ namespace Discord.Media
         }
     }
 }
+

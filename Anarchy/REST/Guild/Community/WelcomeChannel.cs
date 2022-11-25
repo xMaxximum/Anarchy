@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
-
+using System.Text.Json.Serialization;
 namespace Discord
 {
     public class WelcomeChannel : Controllable
     {
-        [JsonProperty("channel_id")]
+        [JsonPropertyName("channel_id")]
         private readonly ulong _id;
 
         public MinimalTextChannel Channel
@@ -12,13 +11,16 @@ namespace Discord
             get { return new MinimalTextChannel(_id).SetClient(Client); }
         }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; private set; }
 
-        [JsonProperty("emoji_id")]
+        [JsonPropertyName("emoji_id")]
         public ulong? EmojiId { get; private set; }
 
-        [JsonProperty("emoji_name")]
+        [JsonPropertyName("emoji_name")]
         public string EmojiName { get; private set; }
     }
 }
+
+
+

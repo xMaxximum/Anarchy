@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -287,7 +288,7 @@ namespace Discord.Gateway
                         case "READY":
                             LoginEventArgs login = message.Data.Deserialize<LoginEventArgs>().SetClient(this.RestClient);
 
-                            if (login.Application != null) _appId = login.Application.Value<ulong>("id");
+                            if (login.Application.ValueKind != JsonValueKind.Null) _appId = login.Application.GetProperty("id").GetUInt64();
 
                             this.RestClient.User = login.User;
                             this.UserSettings = RestClient.User.Type == DiscordUserType.User ? login.Settings : null;

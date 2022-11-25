@@ -1,6 +1,6 @@
-﻿using System;
-using System.Text.Json;
 using System.Text.Json.Serialization;
+using System;
+using System.Text.Json;
 
 namespace Discord.WebSockets
 {
@@ -14,3 +14,4 @@ namespace Discord.WebSockets
         public uint? Sequence { get; private set; }
     }
 }
+

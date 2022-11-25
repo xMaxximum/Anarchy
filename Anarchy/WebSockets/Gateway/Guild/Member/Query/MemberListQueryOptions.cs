@@ -1,4 +1,5 @@
-﻿namespace Discord.Gateway
+using System.Text.Json.Serialization;
+namespace Discord.Gateway
 {
     public class MemberListQueryOptions
     {
@@ -6,3 +7,4 @@
         public int Count { get; set; }
     }
 }
+

@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
 
 namespace Discord
 {
     public class MutualGuild : MinimalGuild
     {
-        [JsonProperty("nick")]
+        [JsonPropertyName("nick")]
         public string Nickname { get; private set; }
 
         public override string ToString()
@@ -18,3 +19,4 @@ namespace Discord
         }
     }
 }
+

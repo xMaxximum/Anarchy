@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+using System.Text.Json.Serialization;
+using System.Reflection;
 
 namespace Discord.Commands
 {
@@ -12,3 +13,4 @@ namespace Discord.Commands
         public PropertyInfo Property { get; private set; }
     }
 }
+

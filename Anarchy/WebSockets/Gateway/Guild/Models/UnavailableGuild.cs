@@ -1,13 +1,14 @@
-﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
 
 namespace Discord.Gateway
 {
     public class UnavailableGuild
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public ulong Id { get; private set; }
 
-        [JsonProperty("unavailable")]
+        [JsonPropertyName("unavailable")]
         public bool Unavailable { get; private set; }
 
         public bool Removed
@@ -16,3 +17,4 @@ namespace Discord.Gateway
         }
     }
 }
+

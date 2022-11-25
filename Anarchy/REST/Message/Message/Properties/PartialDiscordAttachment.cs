@@ -1,6 +1,7 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.IO;
-using Newtonsoft.Json;
+
 
 namespace Discord
 {
@@ -25,21 +26,22 @@ namespace Discord
             Description = description;
         }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         internal ulong Id { get; set; }
 
         private string _fileName;
-        [JsonProperty("filename")]
+        [JsonPropertyName("filename")]
         public string FileName
         {
             get { return _fileName; }
             set { _fileName = Path.GetFileName(value); }
         }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
         [JsonIgnore]
         public DiscordAttachmentFile File { get; set; }
     }
 }
+

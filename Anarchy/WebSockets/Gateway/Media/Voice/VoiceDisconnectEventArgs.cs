@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using Discord.Media;
 using Discord.WebSockets;
 
@@ -23,3 +24,4 @@ namespace Discord.Gateway
         }
     }
 }
+

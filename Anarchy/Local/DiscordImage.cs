@@ -1,10 +1,12 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Graphics.Platform;
-using Newtonsoft.Json;
+
 
 namespace Discord
 {
+    /*
     internal class ImageJsonConverter : JsonConverter<DiscordImage>
     {
         public override bool CanRead => false;
@@ -19,8 +21,9 @@ namespace Discord
             writer.WriteValue($"data:{image.ImageFormat.ToMediaType()};base64,{Convert.ToBase64String(image.PlatformImage.Bytes)}");
         }
     }
+    */
 
-    [JsonConverter(typeof(ImageJsonConverter))]
+    //[JsonConverter(typeof(ImageJsonConverter))]
     public class DiscordImage
     {
         public DiscordImage(IImage image, ImageFormat type)
@@ -39,3 +42,4 @@ namespace Discord
         }
     }
 }
+

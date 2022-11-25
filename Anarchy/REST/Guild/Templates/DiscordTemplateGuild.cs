@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+
 
 namespace Discord
 {
@@ -14,20 +15,20 @@ namespace Discord
             };
         }
 
-        [JsonProperty("region")]
+        [JsonPropertyName("region")]
         public string Region { get; private set; }
 
-        [JsonProperty("verification_level")]
+        [JsonPropertyName("verification_level")]
         public GuildVerificationLevel VerificationLevel { get; private set; }
 
-        [JsonProperty("explicit_content_filter")]
+        [JsonPropertyName("explicit_content_filter")]
         public ExplicitContentFilter ExplicitContentFilter { get; private set; }
 
-        [JsonProperty("roles")]
+        [JsonPropertyName("roles")]
         public IReadOnlyList<DiscordRole> Roles { get; private set; }
 
-        [JsonProperty("channels")]
-        [JsonConverter(typeof(DeepJsonConverter<GuildChannel>))]
+        [JsonPropertyName("channels")]
+        //[JsonConverter(typeof(DeepJsonConverter<GuildChannel>))]
         private List<GuildChannel> _channels;
 
         public IReadOnlyList<GuildChannel> Channels
@@ -45,3 +46,4 @@ namespace Discord
         }
     }
 }
+

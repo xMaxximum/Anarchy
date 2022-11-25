@@ -1,4 +1,5 @@
-﻿namespace Discord
+using System.Text.Json.Serialization;
+namespace Discord
 {
     public class ReactionQuery
     {
@@ -9,3 +10,4 @@
         public ulong AfterId { get; set; }
     }
 }
+

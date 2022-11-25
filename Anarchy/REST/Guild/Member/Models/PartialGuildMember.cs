@@ -1,5 +1,6 @@
-﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System;
+
 
 namespace Discord
 {
@@ -10,7 +11,7 @@ namespace Discord
             OnClientUpdated += (sender, e) => User.SetClient(Client);
         }
 
-        [JsonProperty("guild_id")]
+        [JsonPropertyName("guild_id")]
         internal ulong GuildId { get; set; }
 
         public MinimalGuild Guild
@@ -21,7 +22,7 @@ namespace Discord
             }
         }
 
-        [JsonProperty("user")]
+        [JsonPropertyName("user")]
         public DiscordUser User { get; internal set; }
 
         public new void Dispose()
@@ -31,3 +32,4 @@ namespace Discord
         }
     }
 }
+

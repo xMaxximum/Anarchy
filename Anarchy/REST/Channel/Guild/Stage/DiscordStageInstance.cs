@@ -1,31 +1,31 @@
-﻿using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace Discord
 {
     public class DiscordStageInstance : Controllable
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public ulong Id { get; private set; }
 
-        [JsonProperty("guild_id")]
+        [JsonPropertyName("guild_id")]
         private readonly ulong _guildId;
         public MinimalGuild Guild => new MinimalGuild(_guildId).SetClient(Client);
 
-        [JsonProperty("channel_id")]
+        [JsonPropertyName("channel_id")]
         private readonly ulong _channelId;
         public MinimalChannel Channel => new MinimalChannel(_channelId).SetClient(Client);
 
-        [JsonProperty("topic")]
+        [JsonPropertyName("topic")]
         public string Topic { get; private set; }
 
-        [JsonProperty("discoverable_disabled")]
+        [JsonPropertyName("discoverable_disabled")]
         public bool DiscoveryDisabled { get; private set; }
 
-        [JsonProperty("privacy_level")]
+        [JsonPropertyName("privacy_level")]
         public StagePrivacyLevel PrivacyLevel { get; private set; }
 
-        [JsonProperty("invite_code")]
+        [JsonPropertyName("invite_code")]
         public string InviteCode { get; private set; }
 
         public Task SetClientSpeakingAsync(bool speaker) => Client.SetClientStageSpeakingAsync(_guildId, _channelId, speaker);
@@ -35,3 +35,4 @@ namespace Discord
         public void Delete() => DeleteAsync().GetAwaiter().GetResult();
     }
 }
+

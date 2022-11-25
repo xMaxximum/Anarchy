@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Discord
 {
@@ -8,7 +9,7 @@ namespace Discord
     {
         public static async Task<IReadOnlyList<DiscordGuildSubscription>> BoostGuildAsync(this RestClient<IUserAccount> client, ulong guildId, IEnumerable<ulong> boostSlots)
         {
-            return (await client.HttpClient.PutAsync($"/guilds/{guildId}/premium/subscriptions", $"{{\"user_premium_guild_subscription_slot_ids\":{JsonConvert.SerializeObject(boostSlots)}}}"))
+            return (await client.HttpClient.PutAsync($"/guilds/{guildId}/premium/subscriptions", $"{{\"user_premium_guild_subscription_slot_ids\":{JsonSerializer.Serialize(boostSlots)}}}"))
                                 .Deserialize<IReadOnlyList<DiscordGuildSubscription>>().SetClientsInList(client);
         }
 
@@ -50,3 +51,4 @@ namespace Discord
         }
     }
 }
+

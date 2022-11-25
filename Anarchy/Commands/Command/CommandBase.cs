@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using Discord.Gateway;
 
 namespace Discord.Commands
@@ -18,3 +19,4 @@ namespace Discord.Commands
         public virtual void HandleError(string parameterName, string providedValue, Exception exception) { }
     }
 }
+

@@ -1,6 +1,8 @@
-﻿namespace Discord.Commands
+using System.Text.Json.Serialization;
+namespace Discord.Commands
 {
     public interface IMentionable
     {
     }
 }
+

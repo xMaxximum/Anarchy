@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
 
 namespace Discord
 {
     public class ChannelSettingsProperties
     {
         // cba to implement this rn lol
-        [JsonProperty("mute_config")]
+        [JsonPropertyName("mute_config")]
 #pragma warning disable IDE0052
         private readonly GuildMuteConfig _muteConfig = new GuildMuteConfig()
         {
@@ -20,7 +21,7 @@ namespace Discord
         }
 
         private readonly DiscordParameter<bool> _mutedProperty = new DiscordParameter<bool>();
-        [JsonProperty("muted")]
+        [JsonPropertyName("muted")]
         public bool Muted
         {
             get { return _mutedProperty; }
@@ -33,7 +34,7 @@ namespace Discord
         }
 
         private readonly DiscordParameter<ClientNotificationLevel> _notifsProperty = new DiscordParameter<ClientNotificationLevel>();
-        [JsonProperty("message_notifications")]
+        [JsonPropertyName("message_notifications")]
         public ClientNotificationLevel Notifications
         {
             get { return _notifsProperty; }
@@ -46,3 +47,4 @@ namespace Discord
         }
     }
 }
+

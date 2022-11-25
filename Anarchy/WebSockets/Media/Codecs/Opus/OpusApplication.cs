@@ -1,4 +1,5 @@
-﻿namespace Discord.Media
+using System.Text.Json.Serialization;
+namespace Discord.Media
 {
     internal enum OpusApplication
     {
@@ -7,3 +8,4 @@
         LowLatency = 2051
     }
 }
+

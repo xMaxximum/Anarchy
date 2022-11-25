@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 
 namespace Discord
 {
@@ -44,3 +45,4 @@ namespace Discord
         PrivateThreads = 0x1000000000
     }
 }
+

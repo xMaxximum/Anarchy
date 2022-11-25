@@ -1,4 +1,5 @@
-﻿namespace Discord.Media
+using System.Text.Json.Serialization;
+namespace Discord.Media
 {
     public class VoiceChannelSpeakingEventArgs
     {
@@ -12,3 +13,4 @@
         }
     }
 }
+

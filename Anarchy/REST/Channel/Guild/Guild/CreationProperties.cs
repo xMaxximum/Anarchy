@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Discord
 {
     internal class GuildChannelCreationProperties : ChannelCreationProperties
     {
-        [JsonProperty("parent_id")]
+        [JsonPropertyName("parent_id")]
         public ulong? ParentId { get; set; }
     }
 }

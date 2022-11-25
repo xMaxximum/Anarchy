@@ -1,4 +1,5 @@
-﻿using Discord.Gateway;
+using System.Text.Json.Serialization;
+using Discord.Gateway;
 
 namespace Discord.Commands
 {
@@ -26,3 +27,4 @@ namespace Discord.Commands
         public abstract InteractionResponseProperties Handle();
     }
 }
+

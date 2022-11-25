@@ -1,16 +1,18 @@
-﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
 
 namespace Discord.Gateway
 {
     public class StreamActivityProperties : ActivityProperties
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public new ActivityType Type
         {
             get { return ActivityType.Streaming; }
         }
 
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public string Url { get; set; }
     }
 }
+

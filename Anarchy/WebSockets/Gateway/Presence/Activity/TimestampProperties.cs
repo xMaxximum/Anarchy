@@ -1,12 +1,13 @@
-﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System;
+
 
 namespace Discord.Gateway
 {
     public class TimestampProperties
     {
         private readonly DiscordParameter<long> _startParam = new DiscordParameter<long>();
-        [JsonProperty("start")]
+        [JsonPropertyName("start")]
         private long _startValue
         {
             get { return _startParam; }
@@ -30,3 +31,4 @@ namespace Discord.Gateway
         }
     }
 }
+

@@ -1,4 +1,5 @@
-﻿namespace Discord.Media
+using System.Text.Json.Serialization;
+namespace Discord.Media
 {
     internal class StreamKey
     {
@@ -28,3 +29,4 @@
         public string Serialize() => $"{Location}:{GuildId}:{ChannelId}:{UserId}";
     }
 }
+

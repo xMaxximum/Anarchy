@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using Discord.Media;
 
 namespace Discord.Gateway
@@ -13,3 +14,4 @@ namespace Discord.Gateway
         }
     }
 }
+

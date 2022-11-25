@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using Microsoft.Maui.Graphics;
 
 namespace Discord
@@ -33,3 +34,4 @@ namespace Discord
         }
     }
 }
+

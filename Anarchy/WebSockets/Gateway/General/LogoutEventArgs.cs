@@ -1,4 +1,5 @@
-﻿using Discord.WebSockets;
+using System.Text.Json.Serialization;
+using Discord.WebSockets;
 
 namespace Discord.Gateway
 {
@@ -8,3 +9,4 @@ namespace Discord.Gateway
         { }
     }
 }
+

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
 
 namespace Discord
 {
@@ -9,10 +10,10 @@ namespace Discord
             OnClientUpdated += (sender, e) => User.SetClient(Client);
         }
 
-        [JsonProperty("reason")]
+        [JsonPropertyName("reason")]
         public string Reason { get; private set; }
 
-        [JsonProperty("user")]
+        [JsonPropertyName("user")]
         public DiscordUser User { get; private set; }
 
         internal ulong GuildId { get; set; }
@@ -39,3 +40,4 @@ namespace Discord
         }
     }
 }
+

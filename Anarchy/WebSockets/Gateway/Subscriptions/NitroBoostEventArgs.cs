@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 
 namespace Discord.Gateway
 {
@@ -12,3 +13,4 @@ namespace Discord.Gateway
         }
     }
 }
+

@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 
 namespace Discord
 {
@@ -22,3 +23,4 @@ namespace Discord
         VerifiedBotDeveloper = 1 << 17
     }
 }
+

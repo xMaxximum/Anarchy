@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using Anarchy;
 
 namespace Discord.Gateway
@@ -20,3 +21,4 @@ namespace Discord.Gateway
         public DiscordVoiceState PrivateChannelVoiceState { get; internal set; }
     }
 }
+

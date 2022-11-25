@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 
 namespace Discord
 {
@@ -13,10 +13,11 @@ namespace Discord
             };
         }
 
-        [JsonProperty("total")]
+        [JsonPropertyName("total")]
         public uint Total { get; private set; }
 
-        [JsonProperty("guilds")]
+        [JsonPropertyName("guilds")]
         public IReadOnlyList<DiscoveryGuild> Guilds { get; private set; }
     }
 }
+

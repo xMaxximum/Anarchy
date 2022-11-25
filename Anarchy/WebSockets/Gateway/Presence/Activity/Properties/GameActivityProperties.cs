@@ -1,5 +1,6 @@
-﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System;
+
 
 namespace Discord.Gateway
 {
@@ -10,19 +11,19 @@ namespace Discord.Gateway
             _timestamps = new TimestampProperties();
         }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public new ActivityType Type
         {
             get { return ActivityType.Game; }
         }
 
-        [JsonProperty("details")]
+        [JsonPropertyName("details")]
         public string Details { get; set; }
 
-        [JsonProperty("state")]
+        [JsonPropertyName("state")]
         public string State { get; set; }
 
-        [JsonProperty("timestamps")]
+        [JsonPropertyName("timestamps")]
         private TimestampProperties _timestamps;
 
         public TimeSpan Elapsed
@@ -32,3 +33,4 @@ namespace Discord.Gateway
         }
     }
 }
+

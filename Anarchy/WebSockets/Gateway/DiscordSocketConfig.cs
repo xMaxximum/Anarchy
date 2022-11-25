@@ -1,4 +1,5 @@
-﻿namespace Discord.Gateway
+using System.Text.Json.Serialization;
+namespace Discord.Gateway
 {
     public class DiscordSocketConfig : ApiConfig
     {
@@ -9,3 +10,4 @@
         public DiscordShard Shard { get; set; }
     }
 }
+

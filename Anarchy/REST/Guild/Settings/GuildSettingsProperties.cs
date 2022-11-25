@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+
 
 namespace Discord
 {
     public class GuildSettingsProperties : ChannelSettingsProperties
     {
         private readonly DiscordParameter<bool> _supressProperty = new DiscordParameter<bool>();
-        [JsonProperty("supress_everyone")]
+        [JsonPropertyName("supress_everyone")]
         public bool SupressEveryone
         {
             get { return _supressProperty; }
@@ -19,7 +20,7 @@ namespace Discord
         }
 
         private readonly DiscordParameter<bool> _supressRolesProperty = new DiscordParameter<bool>();
-        [JsonProperty("supress_roles")]
+        [JsonPropertyName("supress_roles")]
         public bool SupressRoles
         {
             get { return _supressRolesProperty; }
@@ -32,7 +33,7 @@ namespace Discord
         }
 
         private readonly DiscordParameter<Dictionary<ulong, ChannelSettingsProperties>> _channelsProperty = new DiscordParameter<Dictionary<ulong, ChannelSettingsProperties>>();
-        [JsonProperty("channel_overrides")]
+        [JsonPropertyName("channel_overrides")]
         public Dictionary<ulong, ChannelSettingsProperties> ChannelOverrides
         {
             get { return _channelsProperty; }
@@ -40,3 +41,4 @@ namespace Discord
         }
     }
 }
+

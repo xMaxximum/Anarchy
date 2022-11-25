@@ -1,4 +1,5 @@
-﻿namespace Discord
+using System.Text.Json.Serialization;
+namespace Discord
 {
     public class GuildQueryOptions
     {
@@ -8,3 +9,4 @@
         public DiscoveryCategory? Category { get; set; }
     }
 }
+

@@ -1,14 +1,15 @@
-﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System;
+
 
 namespace Discord
 {
     public class ConnectedAccount : Controllable
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; private set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         private readonly string _type;
         public ConnectedAccountType Type
         {
@@ -18,10 +19,10 @@ namespace Discord
             }
         }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; protected set; }
 
-        [JsonProperty("verified")]
+        [JsonPropertyName("verified")]
         public bool Verified { get; protected set; }
 
         public override string ToString()
@@ -30,3 +31,4 @@ namespace Discord
         }
     }
 }
+

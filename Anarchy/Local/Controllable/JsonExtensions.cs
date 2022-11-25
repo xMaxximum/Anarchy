@@ -1,11 +1,13 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
+
 
 namespace Discord
 {
     internal static class JsonExtensions
     {
+        /*
         internal static bool TryFindTypes(Type type, out Dictionary<int, Type> types)
         {
             if (DeepJsonConverter.RecognizedTypes.TryGetValue(type, out types))
@@ -39,5 +41,6 @@ namespace Discord
 
             return results;
         }
+        */
     }
 }

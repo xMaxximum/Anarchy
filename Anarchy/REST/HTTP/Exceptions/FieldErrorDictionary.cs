@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 
 namespace Discord
 {
@@ -7,3 +8,4 @@ namespace Discord
         public IReadOnlyList<DiscordFieldError> Errors { get; set; }
     }
 }
+

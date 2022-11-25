@@ -1,4 +1,5 @@
-﻿namespace Discord.Media
+using System.Text.Json.Serialization;
+namespace Discord.Media
 {
     public enum AudioApplication : int
     {
@@ -7,3 +8,4 @@
         Mixed
     }
 }
+

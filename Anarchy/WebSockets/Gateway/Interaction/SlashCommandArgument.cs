@@ -1,20 +1,22 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+
 
 namespace Discord.Gateway
 {
     public class SlashCommandArgument
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public CommandOptionType Type { get; private set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; private set; }
 
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public string Value { get; private set; }
 
-        [JsonProperty("options")]
+        [JsonPropertyName("options")]
         public IReadOnlyList<SlashCommandArgument> Options { get; private set; }
     }
 }
+

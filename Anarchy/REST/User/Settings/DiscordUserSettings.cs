@@ -1,8 +1,8 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Discord
 {
@@ -92,9 +92,9 @@ namespace Discord
             //{
             //    foreach (var attr in property.GetCustomAttributes(false))
             //    {
-            //        if (attr.GetType() == typeof(JsonPropertyAttribute))
+            //        if (attr.GetType() == typeof(JsonPropertyNameAttribute))
             //        {
-            //            var jsonAttr = (JsonPropertyAttribute) attr;
+            //            var jsonAttr = (JsonPropertyNameAttribute) attr;
 
             //            if (jObj.TryGetValue(jsonAttr.PropertyName, out JToken value))
             //                property.SetValue(this, value.ToObject(property.PropertyType));
@@ -109,3 +109,4 @@ namespace Discord
         }
     }
 }
+

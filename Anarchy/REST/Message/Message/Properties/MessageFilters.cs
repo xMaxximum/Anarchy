@@ -1,4 +1,5 @@
-﻿namespace Discord
+using System.Text.Json.Serialization;
+namespace Discord
 {
     public class MessageFilters
     {
@@ -17,3 +18,4 @@
         public uint? Limit { get; set; }
     }
 }
+

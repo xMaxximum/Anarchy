@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace Discord.Gateway
 {
@@ -32,3 +33,4 @@ namespace Discord.Gateway
         }
     }
 }
+

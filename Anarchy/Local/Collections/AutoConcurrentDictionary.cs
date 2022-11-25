@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 
 namespace Anarchy
 {
@@ -40,3 +41,4 @@ namespace Anarchy
         }
     }
 }
+

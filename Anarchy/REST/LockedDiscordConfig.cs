@@ -1,4 +1,5 @@
-﻿using System.Net;
+using System.Text.Json.Serialization;
+using System.Net;
 
 namespace Discord
 {
@@ -20,3 +21,4 @@ namespace Discord
         }
     }
 }
+

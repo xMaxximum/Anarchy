@@ -1,4 +1,5 @@
-﻿namespace Discord.Media
+using System.Text.Json.Serialization;
+namespace Discord.Media
 {
     public enum DiscordMediaOpcode
     {
@@ -17,3 +18,4 @@
         ChangeCodecs
     }
 }
+

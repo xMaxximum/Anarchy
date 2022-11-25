@@ -1,4 +1,5 @@
-﻿namespace Discord
+using System.Text.Json.Serialization;
+namespace Discord
 {
     public static class DiscordNitroSubTypes
     {
@@ -11,3 +12,4 @@
         public static DiscordNitroSubType GuildBoost = new DiscordNitroSubType("Guild Boost", 628379151761408000, 590665532894740483, 499);
     }
 }
+

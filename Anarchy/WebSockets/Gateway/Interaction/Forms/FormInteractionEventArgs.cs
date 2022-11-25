@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.Threading.Tasks;
 
 namespace Discord.Gateway
@@ -31,3 +32,4 @@ namespace Discord.Gateway
         public void ModifyResponse(InteractionResponseProperties changes) => ModifyResponseAsync(changes).GetAwaiter().GetResult();
     }
 }
+

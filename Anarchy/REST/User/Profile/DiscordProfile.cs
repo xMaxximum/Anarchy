@@ -1,6 +1,7 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+
 
 namespace Discord
 {
@@ -27,16 +28,16 @@ namespace Discord
             ConnectedAccounts = profile.ConnectedAccounts;
         }
 
-        [JsonProperty("user")]
+        [JsonPropertyName("user")]
         public DiscordProfileUser User { get; private set; }
 
-        [JsonProperty("premium_since")]
+        [JsonPropertyName("premium_since")]
         public DateTime? NitroSince { get; private set; }
 
-        [JsonProperty("mutual_guilds")]
+        [JsonPropertyName("mutual_guilds")]
         public IReadOnlyList<MutualGuild> MutualGuilds { get; private set; }
 
-        [JsonProperty("connected_accounts")]
+        [JsonPropertyName("connected_accounts")]
         public IReadOnlyList<ConnectedAccount> ConnectedAccounts { get; private set; }
 
         public override string ToString()
@@ -45,3 +46,4 @@ namespace Discord
         }
     }
 }
+

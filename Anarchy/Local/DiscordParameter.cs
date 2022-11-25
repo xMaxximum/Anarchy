@@ -1,4 +1,5 @@
-﻿namespace Discord
+using System.Text.Json.Serialization;
+namespace Discord
 {
     /// <typeparam name="T">Type of property</typeparam>
     internal class DiscordParameter<T>
@@ -28,3 +29,4 @@
         }
     }
 }
+

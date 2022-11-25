@@ -1,10 +1,11 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using Discord.Gateway;
 using Discord.WebSockets;
-using Newtonsoft.Json.Linq;
+
 
 namespace Discord.Media
 {
@@ -176,3 +177,4 @@ namespace Discord.Media
         public void SetSSRC(uint audioSsrc) => Connection.SetSSRC(audioSsrc);
     }
 }
+

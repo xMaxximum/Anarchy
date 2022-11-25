@@ -1,4 +1,5 @@
-﻿namespace Discord.Gateway
+using System.Text.Json.Serialization;
+namespace Discord.Gateway
 {
     public class ReactionEventArgs
     {
@@ -15,3 +16,4 @@
         }
     }
 }
+

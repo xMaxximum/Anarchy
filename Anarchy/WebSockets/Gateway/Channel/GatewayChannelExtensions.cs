@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Discord.Gateway
@@ -132,3 +133,4 @@ namespace Discord.Gateway
         }
     }
 }
+

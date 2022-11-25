@@ -1,9 +1,10 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Discord
 {
@@ -38,40 +39,40 @@ namespace Discord
             return _versionCache;
         }
 
-        [JsonProperty("os")]
+        [JsonPropertyName("os")]
         public string OS { get; set; } = "Windows";
 
-        [JsonProperty("browser")]
+        [JsonPropertyName("browser")]
         public string Browser { get; set; } = "Chrome";
 
-        [JsonProperty("device")]
+        [JsonPropertyName("device")]
         public string Device { get; set; } = "";
 
-        [JsonProperty("system_locale")]
+        [JsonPropertyName("system_locale")]
         public string SystemLocale { get; set; } = "da-DK";
 
-        [JsonProperty("browser_user_agent")]
+        [JsonPropertyName("browser_user_agent")]
         public string UserAgent { get; set; } = "Discord/31433 CFNetwork/1331.0.7 Darwin/21.4.0";
 
-        [JsonProperty("browser_version")]
+        [JsonPropertyName("browser_version")]
         public string BrowserVersion { get; set; } = "91.0.4472.106";
 
-        [JsonProperty("os_version")]
+        [JsonPropertyName("os_version")]
         public string OSVersion { get; set; } = "10";
 
-        [JsonProperty("referrer")]
+        [JsonPropertyName("referrer")]
         public string Referrer { get; set; } = "";
 
-        [JsonProperty("referring_domain")]
+        [JsonPropertyName("referring_domain")]
         public string ReferrerDomain { get; set; } = "";
 
-        [JsonProperty("referrer_current")]
+        [JsonPropertyName("referrer_current")]
         public string ReferrerCurrent { get; set; } = "";
 
-        [JsonProperty("referring_domain_current")]
+        [JsonPropertyName("referring_domain_current")]
         public string ReferrerDomainCurrent { get; set; } = "";
 
-        [JsonProperty("release_channel")]
+        [JsonPropertyName("release_channel")]
         private string _relChannel = "stable";
 
         public DiscordReleaseChannel ReleaseChannel
@@ -80,20 +81,20 @@ namespace Discord
             set => _relChannel = value.ToString().ToLower();
         }
 
-        [JsonProperty("client_build_number")]
+        [JsonPropertyName("client_build_number")]
         public int ClientVersion { get; set; } = GetClientVersion();
 
-        [JsonProperty("client_event_source")]
+        [JsonPropertyName("client_event_source")]
         public string EventSource { get; set; }
 
         public static SuperProperties FromBase64(string base64)
         {
-            return JsonConvert.DeserializeObject<SuperProperties>(Encoding.UTF8.GetString(Convert.FromBase64String(base64)));
+            return JsonSerializer.Deserialize<SuperProperties>(Encoding.UTF8.GetString(Convert.FromBase64String(base64)));
         }
 
         public string ToBase64()
         {
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this)));
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(this)));
         }
 
         public override string ToString()
@@ -102,3 +103,4 @@ namespace Discord
         }
     }
 }
+

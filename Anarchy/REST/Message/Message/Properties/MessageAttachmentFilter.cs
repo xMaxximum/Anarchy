@@ -1,4 +1,5 @@
-﻿namespace Discord
+using System.Text.Json.Serialization;
+namespace Discord
 {
     public enum MessageAttachmentFilter
     {
@@ -10,3 +11,4 @@
         Sound
     }
 }
+

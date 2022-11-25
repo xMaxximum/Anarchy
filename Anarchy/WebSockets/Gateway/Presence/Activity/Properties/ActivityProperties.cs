@@ -1,13 +1,14 @@
-﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
 
 namespace Discord.Gateway
 {
     public class ActivityProperties
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public ActivityType Type { get; set; }
 
         public override string ToString()
@@ -16,3 +17,4 @@ namespace Discord.Gateway
         }
     }
 }
+

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Graphics.Platform;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Discord
 {
@@ -139,9 +141,9 @@ namespace Discord
 
         public static async Task<IReadOnlyList<DiscordChannelSettings>> SetPrivateChannelSettingsAsync(this IRestClient client, Dictionary<ulong, ChannelSettingsProperties> channels)
         {
-            JObject container = new JObject
+            JsonElement container = new JsonNode
             {
-                ["channel_overrides"] = JObject.FromObject(channels)
+                ["channel_overrides"] = JsonSerializer.Serialize(channels)
             };
 
             return (await client.HttpClient.PatchAsync($"/users/@me/guilds/@me/settings", container)).Deserialize<JObject>()["channel_overrides"].ToObject<List<DiscordChannelSettings>>();
@@ -232,7 +234,7 @@ namespace Discord
                 new MemoryStream(
                     await new HttpClient().GetByteArrayAsync(
                         (await client.HttpClient.GetAsync($"https://discordapp.com/api/v6/streams/guild:{guildId}:{channelId}:{userId}/preview?version=1589053944368"))
-                            .Deserialize<JObject>().Value<string>("url")
+                            .Deserialize<JsonElement>().GetProperty("url").GetString()
                     )
                 )
             );

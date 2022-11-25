@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace Discord
 {
@@ -14,3 +15,4 @@ namespace Discord
             client.HttpClient.PatchAsync($"/webhooks/{appId}/{interactionToken}/messages/@original", changes);
     }
 }
+

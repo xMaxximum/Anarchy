@@ -1,4 +1,5 @@
-﻿using System;
+using System.Text.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -211,3 +212,4 @@ namespace Discord.Gateway
         public static IReadOnlyList<GuildMember> GetGuildChannelMembers(this DiscordSocketClient client, ulong guildId, ulong channelId, uint limit = 0) => client.GetGuildChannelMembersAsync(guildId, channelId, limit).GetAwaiter().GetResult();
     }
 }
+

@@ -1,4 +1,5 @@
-﻿namespace Discord.Gateway
+using System.Text.Json.Serialization;
+namespace Discord.Gateway
 {
     public abstract class ComponentFormInput
     {
@@ -6,3 +7,4 @@
         internal abstract void Handle(DiscordSocketClient client, DiscordInteraction interaction);
     }
 }
+
