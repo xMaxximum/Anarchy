@@ -56,7 +56,7 @@ namespace Discord
         {
             config ??= new ApiConfig();
             Config = new LockedDiscordConfig(config);
-
+            _token = token;
             Token = token;
             User = this.GetClientUser();
         }

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -23,7 +24,7 @@ namespace Discord
         {
             try
             {
-                return client.User = (await client.HttpClient.GetAsync("/users/@me")).Deserialize<DiscordClientUser>().SetClient(client);
+                return client.User = (await client.HttpClient.GetAsync("/users/@me")).Body.Deserialize<DiscordClientUser>().SetClient(client);
             }
             catch (DiscordHttpException)
             {
