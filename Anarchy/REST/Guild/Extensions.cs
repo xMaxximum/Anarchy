@@ -7,6 +7,7 @@ using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Graphics.Platform;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Linq;
 
 namespace Discord
 {
@@ -146,7 +147,7 @@ namespace Discord
                 ["channel_overrides"] = JsonSerializer.Serialize(channels)
             };
 
-            return (await client.HttpClient.PatchAsync($"/users/@me/guilds/@me/settings", container)).Deserialize<JsonObject>()["channel_overrides"].Deserialize<List<DiscordChannelSettings>>();
+            return (await client.HttpClient.PatchAsync($"/users/@me/guilds/@me/settings", container)).Deserialize<JsonValue>()["channel_overrides"].Deserialize<List<DiscordChannelSettings>>();
         }
 
         public static IReadOnlyList<DiscordChannelSettings> SetPrivateChannelSettings(this IRestClient client, Dictionary<ulong, ChannelSettingsProperties> channels)
@@ -156,8 +157,12 @@ namespace Discord
 
         public static async Task<IReadOnlyList<PartialGuild>> GetGuildsAsync(this IRestClient client, uint limit = 100, ulong afterId = 0)
         {
-            return (await client.HttpClient.GetAsync($"/users/@me/guilds?limit={limit}&after={afterId}"))
-                            .Deserialize<IReadOnlyList<PartialGuild>>().SetClientsInList(client);
+            var lol = await client.HttpClient.GetAsync($"/users/@me/guilds?limit={limit}&after={afterId}");
+            System.Console.WriteLine(JsonSerializer.Deserialize<JsonValue>(lol.Body));
+            var xd = lol.Deserialize<IReadOnlyList<PartialGuild>>();
+            System.Console.WriteLine(xd.First().GetGuild().Name);
+            return lol.Deserialize<IReadOnlyList<PartialGuild>>().SetClientsInList(client);
+                            //.Deserialize<IReadOnlyList<PartialGuild>>().SetClientsInList(client);
         }
 
         /// <summary>
@@ -234,7 +239,7 @@ namespace Discord
                 new MemoryStream(
                     await new HttpClient().GetByteArrayAsync(
                         (await client.HttpClient.GetAsync($"https://discordapp.com/api/v6/streams/guild:{guildId}:{channelId}:{userId}/preview?version=1589053944368"))
-                            .Deserialize<JsonObject>()["url"].GetValue<string>()
+                            .Deserialize<JsonValue>()["url"].GetValue<string>()
                     )
                 )
             );

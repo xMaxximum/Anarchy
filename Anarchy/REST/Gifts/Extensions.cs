@@ -17,7 +17,7 @@ namespace Discord
                 PaymentMethodId = paymentMethodId,
                 SkuPlanId = subPlanId,
                 ExpectedAmount = expectedAmount
-            })).Deserialize<JsonObject>()["gift_code"].GetValue<string>();
+            })).Deserialize<JsonValue>()["gift_code"].GetValue<string>();
         }
 
         public static string PurchaseGift(this RestClient<IUserAccount> client, ulong paymentMethodId, ulong skuId, ulong subPlanId, int expectedAmount)

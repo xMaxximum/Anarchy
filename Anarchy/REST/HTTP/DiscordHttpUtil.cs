@@ -13,12 +13,12 @@ namespace Discord
         public static void ValidateResponse(HttpResponseMessage response)
         {
             string content = response.Content.ReadAsStringAsync().Result;
-            JsonObject body = (content != null && content.Length != 0) ? JsonNode.Parse(content).Deserialize<JsonObject>() : throw new System.Exception("Couldn't validate response");
+            JsonValue body = (content != null && content.Length != 0) ? JsonNode.Parse(content).Deserialize<JsonValue>() : throw new System.Exception("Couldn't validate response");
 
             ValidateResponse(response, body);
         }
 
-        public static void ValidateResponse(HttpResponseMessage response, JsonObject body)
+        public static void ValidateResponse(HttpResponseMessage response, JsonValue body)
         {
             int statusCode = (int) response.StatusCode;
 

@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -8,13 +7,14 @@ namespace Discord
     public class DiscordHttpResponse
     {
         public int StatusCode { get; private set; }
-        public JsonObject Body { get; private set; }
+        public JsonValue Body { get; private set; }
 
         public DiscordHttpResponse(int statusCode, string content)
         {
             StatusCode = statusCode;
             if (content != null && content.Length != 0)
-                Body = JsonNode.Parse(content).Deserialize<JsonObject>();
+                Body = JsonSerializer.Deserialize<JsonValue>(content);
+
         }
 
         public T Deserialize<T>()

@@ -101,7 +101,6 @@ namespace Discord.Gateway
         public event ClientEventHandler<RequiredActionEventArgs> OnRequiredUserAction;
         #endregion
 
-
         internal IRestClient RestClient { get; private set; }
         public DiscordHttpClient HttpClient { get => RestClient.HttpClient; }
         public DiscordClientUser User { get => RestClient.User; }
@@ -139,7 +138,7 @@ namespace Discord.Gateway
 
         public DiscordSocketClient(IRestClient restClient, DiscordSocketConfig config = null) : base()
         {
-            Console.WriteLine($"name: {restClient.GetClientUser().Username}");
+            Console.WriteLine($"name: {restClient.GetGuilds()[0].Name}");
             restClient = RestClient;
 
             RequestLock = new object();
@@ -324,7 +323,7 @@ namespace Discord.Gateway
                                 Task.Run(() => OnLoggedIn.Invoke(this, login));
                             break;
                         case "USER_SETTINGS_UPDATE":
-                            UserSettings.Update(message.Data);
+                            UserSettings.Update(message.Data.AsObject());
 
                             if (OnSettingsUpdated != null)
                                 Task.Run(() => OnSettingsUpdated.Invoke(this, new DiscordSettingsEventArgs(UserSettings)));

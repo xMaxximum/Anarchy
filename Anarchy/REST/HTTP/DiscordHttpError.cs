@@ -12,7 +12,7 @@ namespace Discord
         public DiscordError Code { get; private set; }
 
         [JsonPropertyName("errors")]
-        public JsonObject Fields { get; private set; }
+        public JsonValue Fields { get; private set; }
 
         [JsonPropertyName("message")]
         public string Message { get; private set; }

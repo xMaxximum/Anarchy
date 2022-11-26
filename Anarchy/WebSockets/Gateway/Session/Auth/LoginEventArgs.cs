@@ -43,7 +43,7 @@ namespace Discord.Gateway
         public DiscordUserSettings Settings { get; private set; }
 
         [JsonPropertyName("guilds")]
-        private readonly List<JsonObject> _guilds;
+        private readonly List<JsonValue> _guilds;
 
         public IReadOnlyList<MinimalGuild> Guilds { get; private set; }
 
@@ -69,7 +69,7 @@ namespace Discord.Gateway
         public IReadOnlyList<DiscordPresence> Presences { get; private set; }
 
         [JsonPropertyName("application")]
-        internal JsonObject Application { get; private set; }
+        internal JsonValue Application { get; private set; }
 
         public override string ToString()
         {

@@ -17,7 +17,7 @@ namespace Discord.Gateway
         }
 
         [JsonPropertyName("user")]
-        private readonly JsonObject _user;
+        private readonly JsonValue _user;
 
         public ulong UserId
         {

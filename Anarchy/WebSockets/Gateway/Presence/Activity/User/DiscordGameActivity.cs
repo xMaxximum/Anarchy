@@ -11,7 +11,7 @@ namespace Discord.Gateway
         public string ApplicationId { get; private set; }
 
         [JsonPropertyName("timestamps")]
-        private readonly JsonObject _obj;
+        private readonly JsonValue _obj;
 
         public DateTimeOffset? Since
         {

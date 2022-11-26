@@ -7,7 +7,7 @@ namespace Discord
     /// </summary>
     public class VoiceChannelProperties : GuildChannelProperties
     {
-        private readonly DiscordParameter<uint> BitrateProperty = new DiscordParameter<uint>();
+        private readonly DiscordParameter<uint> BitrateProperty = new();
         [JsonPropertyName("bitrate")]
         public uint Bitrate
         {
@@ -20,7 +20,7 @@ namespace Discord
             return BitrateProperty.Set;
         }
 
-        private readonly DiscordParameter<uint> UserLimitProperty = new DiscordParameter<uint>();
+        private readonly DiscordParameter<uint> UserLimitProperty = new();
         [JsonPropertyName("user_limit")]
         public uint UserLimit
         {

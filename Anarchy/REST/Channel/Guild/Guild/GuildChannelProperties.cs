@@ -7,7 +7,7 @@ namespace Discord
     /// </summary>
     public class GuildChannelProperties
     {
-        private readonly DiscordParameter<string> NameProperty = new DiscordParameter<string>();
+        private readonly DiscordParameter<string> NameProperty = new();
         [JsonPropertyName("name")]
         public string Name
         {
@@ -20,7 +20,7 @@ namespace Discord
             return NameProperty.Set;
         }
 
-        private readonly DiscordParameter<ulong?> ParentProperty = new DiscordParameter<ulong?>();
+        private readonly DiscordParameter<ulong?> ParentProperty = new();
         [JsonPropertyName("parent_id")]
         public ulong? ParentId
         {
@@ -33,7 +33,7 @@ namespace Discord
             return ParentProperty.Set;
         }
 
-        private readonly DiscordParameter<uint> PositionProperty = new DiscordParameter<uint>();
+        private readonly DiscordParameter<uint> PositionProperty = new();
         [JsonPropertyName("position")]
         public uint Position
         {

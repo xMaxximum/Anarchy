@@ -5,7 +5,7 @@ using System.Text.Json.Nodes;
 
 namespace Discord.WebSockets
 {
-    public class DiscordWebSocketMessage<TOpcode> : DiscordWebSocketRequest<JsonObject, TOpcode> where TOpcode : Enum
+    public class DiscordWebSocketMessage<TOpcode> : DiscordWebSocketRequest<JsonValue, TOpcode> where TOpcode : Enum
     {
         // these members only apply to the Gateway :P
         [JsonPropertyName("t")]

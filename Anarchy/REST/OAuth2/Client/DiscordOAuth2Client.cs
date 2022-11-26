@@ -80,8 +80,8 @@ namespace Discord
             var response = _httpClient.SendAsync(req).GetAwaiter().GetResult();
             var body = JsonNode.Parse(response.Content.ReadAsStringAsync().Result);
 
-            DiscordHttpUtil.ValidateResponse(response, JsonSerializer.Deserialize<JsonObject>(body.ToJsonString()));
-
+            DiscordHttpUtil.ValidateResponse(response, JsonSerializer.Deserialize<JsonValue>(body.ToJsonString()));
+                
             return body.Deserialize<T>();
         }
 

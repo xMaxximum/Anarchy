@@ -18,15 +18,15 @@ namespace Discord
             Code = error.Code;
             ErrorMessage = error.Message;
 
-            if (error.Fields.Any())
-                InvalidFields = FindErrors(error.Fields);
+            if (error.Fields.AsArray().Any())
+                InvalidFields = FindErrors(error.Fields.AsObject());
         }
 
         private static FieldErrorDictionary FindErrors(JsonObject obj)
         {
             var dict = new FieldErrorDictionary();
 
-            foreach (var child in obj)
+            foreach (var child in obj.AsObject())
             {
                 if (child.Key == "_errors") dict.Errors = child.Value.Deserialize<List<DiscordFieldError>>();
                 else dict[child.Key] = FindErrors(child.Value.AsObject());

@@ -6,7 +6,7 @@ namespace Discord
     /// </summary>
     public class TextChannelProperties : GuildChannelProperties
     {
-        internal readonly DiscordParameter<ChannelType> TypeProperty = new DiscordParameter<ChannelType>();
+        internal readonly DiscordParameter<ChannelType> TypeProperty = new();
         [JsonPropertyName("type")]
         private ChannelType _type
         {
@@ -24,7 +24,7 @@ namespace Discord
             return TypeProperty.Set;
         }
 
-        private readonly DiscordParameter<string> TopicProperty = new DiscordParameter<string>();
+        private readonly DiscordParameter<string> TopicProperty = new();
         [JsonPropertyName("topic")]
         public string Topic
         {
@@ -37,7 +37,7 @@ namespace Discord
             return TopicProperty.Set;
         }
 
-        private readonly DiscordParameter<bool> NsfwProperty = new DiscordParameter<bool>();
+        private readonly DiscordParameter<bool> NsfwProperty = new();
         [JsonPropertyName("nsfw")]
         public bool Nsfw
         {
@@ -50,7 +50,7 @@ namespace Discord
             return NsfwProperty.Set;
         }
 
-        private readonly DiscordParameter<int> SlowModeProperty = new DiscordParameter<int>();
+        private readonly DiscordParameter<int> SlowModeProperty = new();
         [JsonPropertyName("rate_limit_per_user")]
         public int SlowMode
         {

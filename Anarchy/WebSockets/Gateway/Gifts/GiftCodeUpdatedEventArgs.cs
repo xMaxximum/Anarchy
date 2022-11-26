@@ -6,7 +6,7 @@ namespace Discord.Gateway
 {
     public class GiftCodeUpdatedEventArgs : GiftCodeCreatedEventArgs
     {
-        public JsonObject Json { get; internal set; }
+        public JsonValue Json { get; internal set; }
 
         [JsonPropertyName("uses")]
         public uint Uses { get; private set; }
