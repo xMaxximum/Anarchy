@@ -157,10 +157,10 @@ namespace Discord
 
         public static async Task<IReadOnlyList<PartialGuild>> GetGuildsAsync(this IRestClient client, uint limit = 100, ulong afterId = 0)
         {
-            var lol = await client.HttpClient.GetAsync($"/users/@me/guilds?limit={limit}&after={afterId}");
-            System.Console.WriteLine(JsonSerializer.Deserialize<JsonValue>(lol.Body));
+            var lol = client.HttpClient.GetAsync($"/users/@me/guilds?limit={limit}&after={afterId}").Result.Body;
+            System.Console.WriteLine(JsonSerializer.Deserialize<JsonValue>(lol));
             var xd = lol.Deserialize<IReadOnlyList<PartialGuild>>();
-            System.Console.WriteLine(xd.First().GetGuild().Name);
+            System.Console.WriteLine(xd[0].GetGuild().Name);
             return lol.Deserialize<IReadOnlyList<PartialGuild>>().SetClientsInList(client);
                             //.Deserialize<IReadOnlyList<PartialGuild>>().SetClientsInList(client);
         }

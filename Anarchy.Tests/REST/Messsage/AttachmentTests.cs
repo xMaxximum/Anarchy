@@ -12,7 +12,7 @@ namespace Discord
             var client = Globals.Client;
             var channelId = Globals.Settings.ChannelId;
 
-            var msg = client.SendFile(channelId, Globals.FileNames.PoetryTxt, $"{nameof(SendFile)} attachment test.");
+            var msg = Globals.RestClient.SendFile(channelId, Globals.FileNames.PoetryTxt, $"{nameof(SendFile)} attachment test.");
 
             Assert.AreEqual(1, msg.Attachments.Count);
         }
@@ -44,7 +44,7 @@ namespace Discord
             var client = Globals.Client;
             var channelId = Globals.Settings.ChannelId;
 
-            var msg = client.SendMessage(channelId, props);
+            var msg = Globals.RestClient.SendMessage(channelId, props);
             Assert.AreEqual(props.Attachments.Count, msg.Attachments.Count);
 
             var postedImage1 = DiscordImageSource.FromUrl(msg.Attachments[0].Url).Result;

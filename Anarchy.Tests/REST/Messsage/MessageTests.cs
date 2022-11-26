@@ -8,7 +8,7 @@
         {
             const string content = "The simplest possible message.";
 
-            var msg = Globals.Client.SendMessage(
+            var msg = Globals.RestClient.SendMessage(
                 Globals.Settings.ChannelId,
                 content);
 

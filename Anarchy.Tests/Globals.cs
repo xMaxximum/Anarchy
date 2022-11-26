@@ -19,6 +19,7 @@ namespace Discord
         }
 
         public static DiscordSocketClient? Client { get; set; }
+        public static RestClient<IUserAccount>? RestClient { get; set; }
 
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)
@@ -32,13 +33,15 @@ namespace Discord
             //    "Port": 8888
             //  }
 
-            var client = new DiscordSocketClient(new DiscordSocketConfig()
+            var restClient = new RestClient<IUserAccount>(Settings.Token);
+
+            var client = new DiscordSocketClient(RestClient, new DiscordSocketConfig()
             {
                 Proxy = Settings.Proxy?.CreateProxy()
             });
 
             client.OnLoggedIn += OnLoggedIn;
-            client.Login(Settings.Token);
+            client.Login();
 
             void OnLoggedIn(DiscordSocketClient client, LoginEventArgs args)
             {
@@ -49,6 +52,7 @@ namespace Discord
             autoResetEvent.WaitOne();
 
             Client = client;
+            RestClient = restClient;
         }
 
         private static Settings.App GetAppSettings()
