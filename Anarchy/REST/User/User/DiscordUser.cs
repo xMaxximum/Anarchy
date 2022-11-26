@@ -1,22 +1,22 @@
-using System.Text.Json.Serialization;
-using System;
-using System.Threading.Tasks;
-using Discord.Commands;
-
 namespace Discord
 {
+    using System;
+    using System.Text.Json.Serialization;
+    using System.Threading.Tasks;
+    using Discord.Commands;
+
     public class DiscordUser : Controllable, IMentionable
     {
         protected static DiscordBadge HypeBadges = DiscordBadge.HypeBravery | DiscordBadge.HypeBrilliance | DiscordBadge.HypeBalance;
 
         [JsonPropertyName("id")]
-        public ulong Id { get; private set; }
+        public ulong Id { get; set; }
 
         [JsonPropertyName("username")]
-        public string Username { get; private set; }
+        public string Username { get; set; }
 
         [JsonPropertyName("discriminator")]
-        public uint Discriminator { get; private set; }
+        public uint Discriminator { get; set; }
 
         [JsonPropertyName("avatar")]
         protected string _avatarHash;

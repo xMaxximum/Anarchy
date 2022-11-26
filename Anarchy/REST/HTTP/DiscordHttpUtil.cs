@@ -1,10 +1,9 @@
-using System.Text.Json.Serialization;
-using System.Net.Http;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-
 namespace Discord
 {
+    using System.Net.Http;
+    using System.Text.Json;
+    using System.Text.Json.Nodes;
+
     internal static class DiscordHttpUtil
     {
         public static string BuildBaseUrl(uint apiVersion, DiscordReleaseChannel releaseChannel) =>
@@ -18,7 +17,7 @@ namespace Discord
             ValidateResponse(response, body);
         }
 
-        public static void ValidateResponse(HttpResponseMessage response, JsonValue body)
+        public static void ValidateResponse(HttpResponseMessage response, JsonNode body)
         {
             int statusCode = (int) response.StatusCode;
 
@@ -32,4 +31,3 @@ namespace Discord
         }
     }
 }
-

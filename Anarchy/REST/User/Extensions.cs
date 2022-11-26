@@ -1,11 +1,19 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-
 namespace Discord
 {
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
+    using System.Threading.Tasks;
+
     public static class UserExtensions
     {
+        // !!!!!!!!!!!!!!!!!!!!!!!!
+        // TODO This definately doesn't belong here. It's here only to get GeClientUserAsync working.
+        private static readonly JsonSerializerOptions Options = new()
+        {
+            PropertyNameCaseInsensitive = true,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
+        };
+
         public static async Task<DiscordUser> GetUserAsync(this IRestClient client, ulong userId)
         {
             return (await client.HttpClient.GetAsync($"/users/{userId}")).Deserialize<DiscordUser>().SetClient(client);
@@ -24,7 +32,8 @@ namespace Discord
         {
             try
             {
-                return client.User = (await client.HttpClient.GetAsync("/users/@me")).Body.Deserialize<DiscordClientUser>().SetClient(client);
+                return client.User = (await client.HttpClient.GetAsync("/users/@me"))
+                    .Body.Deserialize<DiscordClientUser>(Options).SetClient(client);
             }
             catch (DiscordHttpException)
             {

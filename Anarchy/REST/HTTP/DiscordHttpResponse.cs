@@ -1,20 +1,19 @@
-using System.Collections.Generic;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-
 namespace Discord
 {
+    using System.Collections.Generic;
+    using System.Text.Json;
+    using System.Text.Json.Nodes;
+
     public class DiscordHttpResponse
     {
         public int StatusCode { get; private set; }
-        public JsonValue Body { get; private set; }
+        public JsonNode Body { get; private set; }
 
         public DiscordHttpResponse(int statusCode, string content)
         {
             StatusCode = statusCode;
             if (content != null && content.Length != 0)
-                Body = JsonSerializer.Deserialize<JsonValue>(content);
-
+                Body = JsonNode.Parse(content);
         }
 
         public T Deserialize<T>()
